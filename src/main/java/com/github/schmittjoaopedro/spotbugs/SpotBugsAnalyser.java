@@ -24,7 +24,7 @@ public class SpotBugsAnalyser {
     public List<SpotBugsMetrics> analyse(String sourceCode) {
         String packageName = MccUtils.extractPackageFromSourceCode(sourceCode);
         String className = MccUtils.extractClassNameFromSourceCode(sourceCode);
-        Path filePath = Paths.get("temp", className + ".class");
+        Path filePath = Paths.get("temp_spotbugs", className + ".class");
         try {
             List<SpotBugsMetrics> metrics = new ArrayList<>();
             SourceClass sourceClass = new SourceClass(packageName, className, sourceCode);

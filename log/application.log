@@ -1,0 +1,33 @@
+2018-03-11 13:59:57,251 Initializing source code analyse!
+2018-03-11 14:00:11,791 ------------------ ArrayEquality.java ------------------
+2018-03-11 14:00:11,795 Complexity CheckStyle: 183.0
+2018-03-11 14:00:11,796 Complexity PMD: 156.0
+2018-03-11 14:00:11,796 Complexity SpotBugs: 14.0
+2018-03-11 14:00:11,796 Complexity Class: 513.0
+2018-03-11 14:00:11,800 Initializing source code analyse!
+2018-03-11 14:00:12,635 java.lang.NullPointerException
+2018-03-11 14:00:29,206 ------------------ EASYO31231231231.java ------------------
+2018-03-11 14:00:29,207 Complexity CheckStyle: 0.0
+2018-03-11 14:00:29,207 Complexity PMD: 0.0
+2018-03-11 14:00:29,207 Complexity SpotBugs: 0.0
+2018-03-11 14:00:29,208 Complexity Class: 4.0
+2018-03-11 14:00:29,208 Initializing source code analyse!
+2018-03-11 14:00:50,237 Initializing source code analyse!
+2018-03-11 14:01:02,313 ------------------ ArrayEquality.java ------------------
+2018-03-11 14:01:02,316 Complexity CheckStyle: 183.0
+2018-03-11 14:01:02,317 Complexity PMD: 156.0
+2018-03-11 14:01:02,317 Complexity SpotBugs: 14.0
+2018-03-11 14:01:02,318 Complexity Class: 551.0
+2018-03-11 14:01:02,319 Initializing source code analyse!
+2018-03-11 14:01:03,186 java.lang.NullPointerException
+2018-03-11 14:01:03,186 ------------------ EASYO31231231231.java ------------------
+2018-03-11 14:01:03,186 Complexity CheckStyle: 0.0
+2018-03-11 14:01:03,187 Complexity PMD: 0.0
+2018-03-11 14:01:03,187 Complexity SpotBugs: 0.0
+2018-03-11 14:01:03,187 Complexity Class: 0.0
+2018-03-11 14:01:03,188 Initializing source code analyse!
+2018-03-11 14:01:04,755 ------------------ TestClass1.java ------------------
+2018-03-11 14:01:04,755 Complexity CheckStyle: 39.0
+2018-03-11 14:01:04,755 Complexity PMD: 31.0
+2018-03-11 14:01:04,756 Complexity SpotBugs: 4.0
+2018-03-11 14:01:04,756 Complexity Class: 117.0

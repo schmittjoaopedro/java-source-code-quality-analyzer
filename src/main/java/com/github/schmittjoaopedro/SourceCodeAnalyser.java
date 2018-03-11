@@ -14,11 +14,11 @@ public class SourceCodeAnalyser  {
         logger.info("Initializing source code analyse!");
         Metrics metrics = new Metrics();
 
-        SpotBugsAnalyser spotBugsAnalyser = new SpotBugsAnalyser();
-        spotBugsAnalyser.analyse(sourceCode);
-
         PMDAnalyser pmdAnalyser = new PMDAnalyser();
         metrics.setPmdMetrics(pmdAnalyser.analyse(sourceCode));
+
+        SpotBugsAnalyser spotBugsAnalyser = new SpotBugsAnalyser();
+        metrics.setSpotBugsMetrics(spotBugsAnalyser.analyse(sourceCode));
 
         return metrics;
     }

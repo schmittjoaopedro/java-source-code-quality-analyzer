@@ -3,7 +3,6 @@ package com.github.schmittjoaopedro.spotbugs;
 import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.config.UserPreferences;
 import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
-import edu.umd.cs.findbugs.test.AnalysisRunner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,19 +19,13 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
 @ParametersAreNonnullByDefault
 public class AnalysisRunnerSource {
-
     private final List<Path> auxClasspathEntries = new ArrayList<>();
 
-    /**
-     * SpotBugs stores relation between plugin-id and {@link Plugin} instance in a static field ({@code Plugin.allPlugins}),
-     * so we need to store Plugin information in static field too, to avoid duplicated plugin loading.
-     */
     @Nullable
     private static final File PLUGIN_JAR;
 
@@ -96,17 +89,8 @@ public class AnalysisRunnerSource {
         return bugReporter;
     }
 
-    /**
-     * Create a jar file which contains all resource files. This is necessary to
-     * let {@link Plugin#loadCustomPlugin(File, Project)} load custom plugin to
-     * test.
-     *
-     * @return a {@link File} instance which represent generated jar file
-     * @throws IOException
-     * @throws URISyntaxException
-     */
     private static File createTempJar() throws IOException, URISyntaxException {
-        ClassLoader cl = AnalysisRunner.class.getClassLoader();
+        ClassLoader cl = AnalysisRunnerSource.class.getClassLoader();
 
         URL resource = cl.getResource("findbugs.xml");
         URI uri = resource.toURI();
@@ -140,5 +124,4 @@ public class AnalysisRunnerSource {
         }
         return tempJar.toFile();
     }
-
 }

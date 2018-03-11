@@ -1,12 +1,9 @@
 package com.github.schmittjoaopedro;
 
+import com.github.schmittjoaopedro.metrics.Metrics;
 import com.github.schmittjoaopedro.spotbugs.SpotBugsAnalyser;
-import edu.umd.cs.findbugs.BugCollection;
-import edu.umd.cs.findbugs.test.SpotBugsRule;
-import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcher;
-import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
 import org.apache.commons.io.FileUtils;
-import org.junit.Rule;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,7 +18,8 @@ public class SourceCodeAnalyserTest {
         Path sourcePath = Paths.get(resourceDirectory.toString(), "TestClass1.java");
         String sourceCode = FileUtils.readFileToString(new File(sourcePath.toString()), "UTF-8");
         SourceCodeAnalyser sourceCodeAnalyser = new SourceCodeAnalyser();
-        sourceCodeAnalyser.analyse(sourceCode);
+        Metrics metrics = sourceCodeAnalyser.analyse(sourceCode);
+        Assertions.assertThat(metrics).isNotNull();
     }
 
     @Test
@@ -29,8 +27,9 @@ public class SourceCodeAnalyserTest {
         Path resourceDirectory = Paths.get("src", "test", "resources");
         Path sourcePath = Paths.get(resourceDirectory.toString(), "ArrayEquality.java");
         String sourceCode = FileUtils.readFileToString(new File(sourcePath.toString()), "UTF-8");
-        SpotBugsAnalyser spotBugsAnalyser = new SpotBugsAnalyser();
-        spotBugsAnalyser.analyse(sourceCode);
+        SourceCodeAnalyser sourceCodeAnalyser = new SourceCodeAnalyser();
+        Metrics metrics = sourceCodeAnalyser.analyse(sourceCode);
+        Assertions.assertThat(metrics).isNotNull();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.github.schmittjoaopedro.spotbugs;
+package com.github.schmittjoaopedro.analyser.spotbugs;
 
 import edu.umd.cs.findbugs.*;
 import edu.umd.cs.findbugs.config.UserPreferences;

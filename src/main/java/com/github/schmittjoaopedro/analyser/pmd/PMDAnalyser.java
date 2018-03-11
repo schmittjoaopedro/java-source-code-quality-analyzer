@@ -1,11 +1,8 @@
-package com.github.schmittjoaopedro.pmd;
+package com.github.schmittjoaopedro.analyser.pmd;
 
-import com.github.schmittjoaopedro.metrics.PMDMetrics;
+import com.github.schmittjoaopedro.model.PMDMetric;
 import net.sourceforge.pmd.*;
 import net.sourceforge.pmd.lang.LanguageVersion;
-import net.sourceforge.pmd.lang.LanguageVersionHandler;
-import net.sourceforge.pmd.lang.java.JavaLanguageHandler;
-import net.sourceforge.pmd.lang.java.JavaLanguageModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +16,7 @@ public class PMDAnalyser {
 
     private static Logger logger = LogManager.getLogger(PMDAnalyser.class);
 
-    public List<PMDMetrics> analyse(String sourceCode) {
+    public List<PMDMetric> analyse(String sourceCode) {
         try {
             LanguageVersion languageVersion = LanguageVersion.JAVA_18;
             InputStream stream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
@@ -36,18 +33,18 @@ public class PMDAnalyser {
                 ruleSets.addRuleSet(ruleSet);
             });
             pmd.getSourceCodeProcessor().processSourceCode(stream, ruleSets, ctx);
-            List<PMDMetrics> metrics = new ArrayList<>();
+            List<PMDMetric> metrics = new ArrayList<>();
             report.iterator().forEachRemaining(violation -> {
-                PMDMetrics pmdMetrics = new PMDMetrics();
-                pmdMetrics.setBeginLine(violation.getBeginLine());
-                pmdMetrics.setBeginColumn(violation.getBeginColumn());
-                pmdMetrics.setEndLine(violation.getEndLine());
-                pmdMetrics.setEndColumn(violation.getEndColumn());
-                pmdMetrics.setDescription(violation.getDescription());
-                pmdMetrics.setRule(violation.getRule().getDescription());
-                pmdMetrics.setMessage(violation.getRule().getMessage());
-                pmdMetrics.setPriority(violation.getRule().getPriority().getPriority());
-                metrics.add(pmdMetrics);
+                PMDMetric pmdMetric = new PMDMetric();
+                pmdMetric.setBeginLine(violation.getBeginLine());
+                pmdMetric.setBeginColumn(violation.getBeginColumn());
+                pmdMetric.setEndLine(violation.getEndLine());
+                pmdMetric.setEndColumn(violation.getEndColumn());
+                pmdMetric.setDescription(violation.getDescription());
+                pmdMetric.setRule(violation.getRule().getDescription());
+                pmdMetric.setMessage(violation.getRule().getMessage());
+                pmdMetric.setPriority(violation.getRule().getPriority().getPriority());
+                metrics.add(pmdMetric);
             });
             return metrics;
         } catch (Exception e) {

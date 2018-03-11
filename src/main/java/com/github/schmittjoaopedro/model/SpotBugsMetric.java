@@ -1,8 +1,8 @@
-package com.github.schmittjoaopedro.metrics;
+package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
 
-public class SpotBugsMetrics implements Serializable {
+public class SpotBugsMetric implements Serializable {
 
     private String message;
 
@@ -14,11 +14,11 @@ public class SpotBugsMetrics implements Serializable {
 
     private String priorityCategory;
 
-    public SpotBugsMetrics() {
+    public SpotBugsMetric() {
         super();
     }
 
-    public SpotBugsMetrics(String message, String category, int rank, int priority, String priorityCategory) {
+    public SpotBugsMetric(String message, String category, int rank, int priority, String priorityCategory) {
         super();
         this.message = message;
         this.category = category;

@@ -1,11 +1,9 @@
-package com.github.schmittjoaopedro;
+package com.github.schmittjoaopedro.analyser;
 
-import com.github.schmittjoaopedro.metrics.Metrics;
-import com.github.schmittjoaopedro.spotbugs.SpotBugsAnalyser;
+import com.github.schmittjoaopedro.model.Metric;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,13 +19,13 @@ public class SourceCodeAnalyserTest {
     public void testSampleCases() throws Exception {
         Path rootPath = Paths.get("src", "test", "resources", "samples");
         File[] files = new File(rootPath.toString()).listFiles();
-        List<Metrics> metrics = new ArrayList<>();
+        List<Metric> metrics = new ArrayList<>();
         for (File file : files) {
             metrics.add(analyseSourceCode(rootPath, file.getName()));
         }
-        Collections.sort(metrics, new Comparator<Metrics>() {
+        Collections.sort(metrics, new Comparator<Metric>() {
             @Override
-            public int compare(Metrics a, Metrics b) {
+            public int compare(Metric a, Metric b) {
                 if (a.getClassComplexity() < b.getClassComplexity()) {
                     return -1;
                 } else if (a.getClassComplexity() < b.getClassComplexity()) {
@@ -37,7 +35,7 @@ public class SourceCodeAnalyserTest {
                 }
             }
         });
-        for(Metrics m : metrics) {
+        for(Metric m : metrics) {
             logger.info(m.getClassName() + " = " + m.getClassComplexity());
         }
     }
@@ -46,13 +44,13 @@ public class SourceCodeAnalyserTest {
     public void testProject1Cases() throws Exception {
         Path rootPath = Paths.get("src", "test", "resources", "project1");
         File[] files = new File(rootPath.toString()).listFiles();
-        List<Metrics> metrics = new ArrayList<>();
+        List<Metric> metrics = new ArrayList<>();
         for (File file : files) {
             metrics.add(analyseSourceCode(rootPath, file.getName()));
         }
-        Collections.sort(metrics, new Comparator<Metrics>() {
+        Collections.sort(metrics, new Comparator<Metric>() {
             @Override
-            public int compare(Metrics a, Metrics b) {
+            public int compare(Metric a, Metric b) {
                 if (a.getClassComplexity() < b.getClassComplexity()) {
                     return -1;
                 } else if (a.getClassComplexity() < b.getClassComplexity()) {
@@ -62,31 +60,31 @@ public class SourceCodeAnalyserTest {
                 }
             }
         });
-        for(Metrics m : metrics) {
+        for(Metric m : metrics) {
             logger.info(m.getClassName() + " = " + m.getClassComplexity());
         }
     }
 
 
-    private Metrics analyseSourceCode(Path rootPath, String classFile) throws Exception {
+    private Metric analyseSourceCode(Path rootPath, String classFile) throws Exception {
         Path sourcePath = Paths.get(rootPath.toString(), classFile);
         String sourceCode = FileUtils.readFileToString(new File(sourcePath.toString()), "UTF-8");
         SourceCodeAnalyser sourceCodeAnalyser = new SourceCodeAnalyser();
-        Metrics metrics = sourceCodeAnalyser.analyse(sourceCode);
+        Metric metric = sourceCodeAnalyser.analyse(sourceCode);
         logger.info("------------------ " + classFile + " ------------------");
-        metrics.getCheckstyleMetrics().forEach(checkStyle -> {
+        metric.getCheckstyleMetrics().forEach(checkStyle -> {
             //logger.info("CheckStyle: [" + checkStyle.getSeverityLevel() + "](" + checkStyle.getLine() + "): " + checkStyle.getDescription());
         });
-        metrics.getPmdMetrics().forEach(pmd -> {
+        metric.getPmdMetrics().forEach(pmd -> {
             //logger.info("PMD: [" + pmd.getPriority() + "](" + pmd.getBeginLine() + ") " + pmd.getDescription());
         });
-        metrics.getSpotBugsMetrics().forEach(spotBugs -> {
+        metric.getSpotBugsMetrics().forEach(spotBugs -> {
             //logger.info("SpotBugs [" + spotBugs.getPriority() + "]: " + spotBugs.getMessage());
         });
-        logger.info("Complexity CheckStyle: " + metrics.getCheckStyleComplexity());
-        logger.info("Complexity PMD: " + metrics.getPmdComplexity());
-        logger.info("Complexity SpotBugs: " + metrics.getSpotBugsComplexity());
-        logger.info("Complexity Class: " + metrics.getClassComplexity());
-        return metrics;
+        logger.info("Complexity CheckStyle: " + metric.getCheckStyleComplexity());
+        logger.info("Complexity PMD: " + metric.getPmdComplexity());
+        logger.info("Complexity SpotBugs: " + metric.getSpotBugsComplexity());
+        logger.info("Complexity Class: " + metric.getClassComplexity());
+        return metric;
     }
 }

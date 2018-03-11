@@ -1,18 +1,20 @@
-package com.github.schmittjoaopedro.metrics;
+package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Metrics implements Serializable {
+public class Metric implements Serializable {
+
+    private String id;
 
     private String className;
 
-    private List<PMDMetrics> pmdMetrics;
+    private List<PMDMetric> pmdMetrics;
 
-    private List<SpotBugsMetrics> spotBugsMetrics;
+    private List<SpotBugsMetric> spotBugsMetrics;
 
-    private List<CheckstyleMetrics> checkstyleMetrics;
+    private List<CheckstyleMetric> checkstyleMetrics;
 
     private double pmdComplexity;
 
@@ -22,34 +24,34 @@ public class Metrics implements Serializable {
 
     private double classComplexity;
 
-    public Metrics() {
+    public Metric() {
         super();
     }
 
-    public List<SpotBugsMetrics> getSpotBugsMetrics() {
+    public List<SpotBugsMetric> getSpotBugsMetrics() {
         if (spotBugsMetrics == null) spotBugsMetrics = new ArrayList<>();
         return spotBugsMetrics;
     }
 
-    public void setSpotBugsMetrics(List<SpotBugsMetrics> spotBugsMetrics) {
+    public void setSpotBugsMetrics(List<SpotBugsMetric> spotBugsMetrics) {
         this.spotBugsMetrics = spotBugsMetrics;
     }
 
-    public List<PMDMetrics> getPmdMetrics() {
+    public List<PMDMetric> getPmdMetrics() {
         if (pmdMetrics == null) pmdMetrics = new ArrayList<>();
         return pmdMetrics;
     }
 
-    public void setPmdMetrics(List<PMDMetrics> pmdMetrics) {
+    public void setPmdMetrics(List<PMDMetric> pmdMetrics) {
         this.pmdMetrics = pmdMetrics;
     }
 
-    public List<CheckstyleMetrics> getCheckstyleMetrics() {
+    public List<CheckstyleMetric> getCheckstyleMetrics() {
         if (checkstyleMetrics == null) checkstyleMetrics = new ArrayList<>();
         return checkstyleMetrics;
     }
 
-    public void setCheckstyleMetrics(List<CheckstyleMetrics> checkstyleMetrics) {
+    public void setCheckstyleMetrics(List<CheckstyleMetric> checkstyleMetrics) {
         this.checkstyleMetrics = checkstyleMetrics;
     }
 

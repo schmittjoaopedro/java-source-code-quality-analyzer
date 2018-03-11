@@ -1,8 +1,8 @@
-package com.github.schmittjoaopedro.metrics;
+package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
 
-public class CheckstyleMetrics implements Serializable {
+public class CheckstyleMetric implements Serializable {
 
     private int line;
 
@@ -10,7 +10,7 @@ public class CheckstyleMetrics implements Serializable {
 
     private int severityLevel;
 
-    public CheckstyleMetrics() {
+    public CheckstyleMetric() {
         super();
     }
 

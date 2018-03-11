@@ -1,8 +1,8 @@
-package com.github.schmittjoaopedro.metrics;
+package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
 
-public class PMDMetrics implements Serializable {
+public class PMDMetric implements Serializable {
 
     private int beginLine;
 
@@ -20,7 +20,7 @@ public class PMDMetrics implements Serializable {
 
     private int priority;
 
-    public PMDMetrics() {
+    public PMDMetric() {
         super();
     }
 

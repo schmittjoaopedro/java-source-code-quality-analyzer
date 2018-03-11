@@ -1,13 +1,10 @@
-package com.github.schmittjoaopedro.checkstyle;
+package com.github.schmittjoaopedro.analyser.checkstyle;
 
+import com.github.schmittjoaopedro.model.CheckstyleMetric;
 import com.github.schmittjoaopedro.mcc.utils.MccUtils;
-import com.github.schmittjoaopedro.metrics.CheckstyleMetrics;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
-import com.puppycrawl.tools.checkstyle.api.AuditListener;
-import com.puppycrawl.tools.checkstyle.api.Configuration;
-import com.puppycrawl.tools.checkstyle.api.FileSetCheck;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +20,7 @@ public class CheckstyleAnalyser {
 
     private static Logger logger = LogManager.getLogger(CheckstyleAnalyser.class);
 
-    public List<CheckstyleMetrics> analyse(String sourceCode) {
+    public List<CheckstyleMetric> analyse(String sourceCode) {
         String className = MccUtils.extractClassNameFromSourceCode(sourceCode);
         Path filePath = Paths.get("temp_checkstyle", className + ".java");
         try {

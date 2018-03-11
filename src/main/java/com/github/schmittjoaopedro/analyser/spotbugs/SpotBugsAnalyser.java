@@ -1,9 +1,9 @@
-package com.github.schmittjoaopedro.spotbugs;
+package com.github.schmittjoaopedro.analyser.spotbugs;
 
 import com.github.schmittjoaopedro.mcc.engine.MemoryClassCompiler;
 import com.github.schmittjoaopedro.mcc.object.SourceClass;
 import com.github.schmittjoaopedro.mcc.utils.MccUtils;
-import com.github.schmittjoaopedro.metrics.SpotBugsMetrics;
+import com.github.schmittjoaopedro.model.SpotBugsMetric;
 import edu.umd.cs.findbugs.BugCollection;
 import edu.umd.cs.findbugs.BugInstance;
 import org.apache.commons.io.FileUtils;
@@ -21,12 +21,12 @@ public class SpotBugsAnalyser {
 
     private static Logger logger = LogManager.getLogger(SpotBugsAnalyser.class);
 
-    public List<SpotBugsMetrics> analyse(String sourceCode) {
+    public List<SpotBugsMetric> analyse(String sourceCode) {
         String packageName = MccUtils.extractPackageFromSourceCode(sourceCode);
         String className = MccUtils.extractClassNameFromSourceCode(sourceCode);
         Path filePath = Paths.get("temp_spotbugs", className + ".class");
         try {
-            List<SpotBugsMetrics> metrics = new ArrayList<>();
+            List<SpotBugsMetric> metrics = new ArrayList<>();
             SourceClass sourceClass = new SourceClass(packageName, className, sourceCode);
             MemoryClassCompiler compiler = new MemoryClassCompiler();
             compiler.compile(sourceClass);
@@ -34,7 +34,7 @@ public class SpotBugsAnalyser {
             AnalysisRunnerSource runner = new AnalysisRunnerSource();
             BugCollection bugCollection = runner.run(filePath).getBugCollection();
             for (BugInstance bugInstance : bugCollection.getCollection()) {
-                metrics.add(new SpotBugsMetrics(
+                metrics.add(new SpotBugsMetric(
                     bugInstance.getMessageWithoutPrefix(),
                     bugInstance.getBugPattern().getCategory(),
                     bugInstance.getBugRank(),

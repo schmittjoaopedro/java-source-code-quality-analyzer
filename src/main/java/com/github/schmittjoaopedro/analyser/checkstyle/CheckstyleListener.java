@@ -1,6 +1,6 @@
-package com.github.schmittjoaopedro.checkstyle;
+package com.github.schmittjoaopedro.analyser.checkstyle;
 
-import com.github.schmittjoaopedro.metrics.CheckstyleMetrics;
+import com.github.schmittjoaopedro.model.CheckstyleMetric;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AuditListener;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,7 @@ public class CheckstyleListener implements AuditListener {
 
     private static Logger logger = LogManager.getLogger(CheckstyleListener.class);
 
-    private List<CheckstyleMetrics> checkstyleMetrics;
+    private List<CheckstyleMetric> checkstyleMetrics;
 
     @Override
     public void auditStarted(AuditEvent auditEvent) { }
@@ -29,22 +29,22 @@ public class CheckstyleListener implements AuditListener {
 
     @Override
     public void addError(AuditEvent auditEvent) {
-        CheckstyleMetrics checkstyleMetrics = new CheckstyleMetrics();
-        checkstyleMetrics.setLine(auditEvent.getLocalizedMessage().getLineNo());
-        checkstyleMetrics.setDescription(auditEvent.getLocalizedMessage().getMessage());
-        checkstyleMetrics.setSeverityLevel(auditEvent.getLocalizedMessage().getSeverityLevel().ordinal());
-        getCheckstyleMetrics().add(checkstyleMetrics);
+        CheckstyleMetric checkstyleMetric = new CheckstyleMetric();
+        checkstyleMetric.setLine(auditEvent.getLocalizedMessage().getLineNo());
+        checkstyleMetric.setDescription(auditEvent.getLocalizedMessage().getMessage());
+        checkstyleMetric.setSeverityLevel(auditEvent.getLocalizedMessage().getSeverityLevel().ordinal());
+        getCheckstyleMetrics().add(checkstyleMetric);
     }
 
     @Override
     public void addException(AuditEvent auditEvent, Throwable throwable) { }
 
-    public List<CheckstyleMetrics> getCheckstyleMetrics() {
+    public List<CheckstyleMetric> getCheckstyleMetrics() {
         if(checkstyleMetrics == null) checkstyleMetrics = new ArrayList<>();
         return checkstyleMetrics;
     }
 
-    public void setCheckstyleMetrics(List<CheckstyleMetrics> checkstyleMetrics) {
+    public void setCheckstyleMetrics(List<CheckstyleMetric> checkstyleMetrics) {
         this.checkstyleMetrics = checkstyleMetrics;
     }
 }

@@ -21,15 +21,15 @@ public class PMDAnalyser {
 
     public List<PMDMetrics> analyse(String sourceCode) {
         try {
-            //LanguageVersion languageVersion = new LanguageVersion("Java", "9", new JavaLanguageHandler(9), true);
+            LanguageVersion languageVersion = LanguageVersion.JAVA_18;
             InputStream stream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
             PMD pmd = new PMD();
-            //pmd.getConfiguration().setDefaultLanguageVersion(languageVersion);
+            pmd.getConfiguration().setDefaultLanguageVersion(languageVersion);
             RuleContext ctx = new RuleContext();
             Report report = new Report();
             ctx.setReport(report);
             ctx.setSourceCodeFilename("n/a");
-            //ctx.setLanguageVersion(languageVersion);
+            ctx.setLanguageVersion(languageVersion);
             ctx.setIgnoreExceptions(false);
             RuleSets ruleSets = new RuleSets();
             new RuleSetFactory().getRegisteredRuleSets().forEachRemaining(ruleSet -> {
@@ -37,7 +37,7 @@ public class PMDAnalyser {
             });
             pmd.getSourceCodeProcessor().processSourceCode(stream, ruleSets, ctx);
             List<PMDMetrics> metrics = new ArrayList<>();
-            report.getViolationTree().iterator().forEachRemaining(violation -> {
+            report.iterator().forEachRemaining(violation -> {
                 PMDMetrics pmdMetrics = new PMDMetrics();
                 pmdMetrics.setBeginLine(violation.getBeginLine());
                 pmdMetrics.setBeginColumn(violation.getBeginColumn());

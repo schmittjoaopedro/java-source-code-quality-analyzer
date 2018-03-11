@@ -20,7 +20,7 @@ public class CheckstyleAnalyser {
 
     private static Logger logger = LogManager.getLogger(CheckstyleAnalyser.class);
 
-    public List<CheckstyleMetric> analyse(String sourceCode) {
+    public List<CheckstyleMetric> analyse(String sourceCode) throws Exception {
         String className = MccUtils.extractClassNameFromSourceCode(sourceCode);
         Path filePath = Paths.get("temp_checkstyle", className + ".java");
         try {
@@ -37,7 +37,7 @@ public class CheckstyleAnalyser {
             return checkstyleListener.getCheckstyleMetrics();
         } catch (Exception e) {
             logger.error(e);
-            return null;
+            throw e;
         } finally {
             try {
                 FileUtils.forceDelete(new File(filePath.toString()));

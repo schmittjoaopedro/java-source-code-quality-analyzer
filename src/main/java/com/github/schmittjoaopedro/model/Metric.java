@@ -10,11 +10,9 @@ public class Metric implements Serializable {
 
     private String className;
 
-    private List<PMDMetric> pmdMetrics;
+    private String error;
 
-    private List<SpotBugsMetric> spotBugsMetrics;
-
-    private List<CheckstyleMetric> checkstyleMetrics;
+    private double classComplexity;
 
     private double pmdComplexity;
 
@@ -22,7 +20,11 @@ public class Metric implements Serializable {
 
     private double spotBugsComplexity;
 
-    private double classComplexity;
+    private List<PMDMetric> pmdMetrics;
+
+    private List<SpotBugsMetric> spotBugsMetrics;
+
+    private List<CheckstyleMetric> checkstyleMetrics;
 
     public Metric() {
         super();
@@ -93,5 +95,13 @@ public class Metric implements Serializable {
 
     public void setClassComplexity(double classComplexity) {
         this.classComplexity = classComplexity;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

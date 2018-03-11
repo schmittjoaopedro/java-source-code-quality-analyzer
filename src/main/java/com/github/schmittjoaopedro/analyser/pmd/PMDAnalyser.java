@@ -16,7 +16,7 @@ public class PMDAnalyser {
 
     private static Logger logger = LogManager.getLogger(PMDAnalyser.class);
 
-    public List<PMDMetric> analyse(String sourceCode) {
+    public List<PMDMetric> analyse(String sourceCode) throws Exception {
         try {
             LanguageVersion languageVersion = LanguageVersion.JAVA_18;
             InputStream stream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
@@ -49,8 +49,8 @@ public class PMDAnalyser {
             return metrics;
         } catch (Exception e) {
             logger.error(e);
+            throw e;
         }
-        return null;
     }
 
 }

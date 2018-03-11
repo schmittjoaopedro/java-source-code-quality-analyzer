@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java source Analyser</title>
+</head>
+<body>
+    <h1>Source code analyser</h1>
+    <input type="checkbox" checked="true" id="isPmd" /><label>PMD</label>&nbsp&nbsp
+    <input type="checkbox" checked="true" id="isCheckStyle" /><label>CheckStyle</label>&nbsp&nbsp
+    <input type="checkbox" checked="true" id="isSpotBugs" /><label>SpotBugs</label>
+    <br />
+    <textarea id="sourceCode" cols="100" rows="30"></textarea>
+    <br/>
+    <button id="calculate">Calculate</button>
+    <br/>
+    <img id="loading" src="loading.svg" style="display: none;"/>
+    <pre><code id="response"></code></pre>
+</body>
+<script src="jquery.js"></script>
+<script>
+    $('#calculate').click(() => {
+        $('#loading').show();
+        $('#response').text('');
+        $.ajax({
+            method: "POST",
+            url: '/metrics',
+            dataType: 'json',
+            data: JSON.stringify({
+                sourceCode: $('#sourceCode').val(),
+                pmd: $("#isPmd").is(':checked'),
+                checkStyle: $("#isCheckStyle").is(':checked'),
+                spotBugs: $("#isSpotBugs").is(':checked')
+            }),
+            contentType: 'application/json'
+        }).done(function(response) {
+            $('#loading').hide();
+            $('#response').text(JSON.stringify(response, null, 2));
+        });
+    });
+</script>
+</html>

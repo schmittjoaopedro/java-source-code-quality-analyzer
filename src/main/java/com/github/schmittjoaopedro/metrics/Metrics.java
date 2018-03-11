@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Metrics implements Serializable {
 
+    private String className;
+
     private List<PMDMetrics> pmdMetrics;
 
     private List<SpotBugsMetrics> spotBugsMetrics;
@@ -49,6 +51,14 @@ public class Metrics implements Serializable {
 
     public void setCheckstyleMetrics(List<CheckstyleMetrics> checkstyleMetrics) {
         this.checkstyleMetrics = checkstyleMetrics;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public double getPmdComplexity() {

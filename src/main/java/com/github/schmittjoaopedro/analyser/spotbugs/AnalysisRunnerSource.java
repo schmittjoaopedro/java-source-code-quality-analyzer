@@ -1,29 +1,8 @@
 package com.github.schmittjoaopedro.analyser.spotbugs;
 
-import edu.umd.cs.findbugs.*;
-import edu.umd.cs.findbugs.config.UserPreferences;
-import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.JarURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
-
-@ParametersAreNonnullByDefault
+//@ParametersAreNonnullByDefault
 public class AnalysisRunnerSource {
+    /*
     private final List<Path> auxClasspathEntries = new ArrayList<>();
 
     @Nullable
@@ -124,4 +103,5 @@ public class AnalysisRunnerSource {
         }
         return tempJar.toFile();
     }
+    */
 }

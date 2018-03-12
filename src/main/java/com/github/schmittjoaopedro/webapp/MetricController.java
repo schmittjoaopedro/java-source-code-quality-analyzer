@@ -3,7 +3,6 @@ package com.github.schmittjoaopedro.webapp;
 import com.github.schmittjoaopedro.analyser.SourceCodeAnalyser;
 import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.SourceCode;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

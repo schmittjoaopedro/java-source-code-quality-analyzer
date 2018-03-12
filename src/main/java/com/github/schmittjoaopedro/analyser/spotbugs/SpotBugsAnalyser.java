@@ -1,24 +1,8 @@
 package com.github.schmittjoaopedro.analyser.spotbugs;
 
-import com.github.schmittjoaopedro.mcc.engine.MemoryClassCompiler;
-import com.github.schmittjoaopedro.mcc.object.SourceClass;
-import com.github.schmittjoaopedro.mcc.utils.MccUtils;
-import com.github.schmittjoaopedro.model.SpotBugsMetric;
-import edu.umd.cs.findbugs.BugCollection;
-import edu.umd.cs.findbugs.BugInstance;
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SpotBugsAnalyser {
 
+    /*
     private static Logger logger = LogManager.getLogger(SpotBugsAnalyser.class);
 
     public List<SpotBugsMetric> analyse(String sourceCode) throws Exception {
@@ -54,5 +38,6 @@ public class SpotBugsAnalyser {
             }
         }
     }
+    */
 
 }

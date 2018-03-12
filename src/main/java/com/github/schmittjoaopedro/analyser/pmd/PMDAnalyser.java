@@ -2,6 +2,7 @@ package com.github.schmittjoaopedro.analyser.pmd;
 
 import com.github.schmittjoaopedro.model.PMDMetric;
 import net.sourceforge.pmd.*;
+import net.sourceforge.pmd.lang.LanguageRegistry;
 import net.sourceforge.pmd.lang.LanguageVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,7 @@ public class PMDAnalyser {
 
     public List<PMDMetric> analyse(String sourceCode) throws Exception {
         try {
-            LanguageVersion languageVersion = LanguageVersion.JAVA_18;
+            LanguageVersion languageVersion = LanguageRegistry.getDefaultLanguage().getDefaultVersion();
             InputStream stream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
             PMD pmd = new PMD();
             pmd.getConfiguration().setDefaultLanguageVersion(languageVersion);

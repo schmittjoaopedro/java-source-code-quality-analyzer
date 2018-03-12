@@ -1,7 +1,7 @@
 package com.github.schmittjoaopedro.analyser.checkstyle;
 
+import com.github.schmittjoaopedro.analyser.MetricCalculator;
 import com.github.schmittjoaopedro.model.CheckstyleMetric;
-import com.github.schmittjoaopedro.mcc.utils.MccUtils;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.PropertiesExpander;
@@ -21,7 +21,7 @@ public class CheckstyleAnalyser {
     private static Logger logger = LogManager.getLogger(CheckstyleAnalyser.class);
 
     public List<CheckstyleMetric> analyse(String sourceCode) throws Exception {
-        String className = MccUtils.extractClassNameFromSourceCode(sourceCode);
+        String className = MetricCalculator.extractClassNameFromSourceCode(sourceCode);
         Path filePath = Paths.get("temp_checkstyle", className + ".java");
         try {
             FileUtils.write(new File(filePath.toString()), sourceCode);

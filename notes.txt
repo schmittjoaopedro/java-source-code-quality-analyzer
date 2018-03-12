@@ -1,2 +1,3 @@
 # Build and run
-mvn package -DskipTests && java -jar target/java-source-code-quality-analyzer-1.0.0.jar
+mvn package -DskipTests && cd target && java -jar java-source-code-quality-analyzer-1.0.0.jar
+mvn spring-boot:run

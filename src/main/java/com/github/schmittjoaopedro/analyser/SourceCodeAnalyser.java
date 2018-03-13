@@ -1,13 +1,13 @@
 package com.github.schmittjoaopedro.analyser;
 
-import com.github.schmittjoaopedro.analyser.checkstyle.CheckstyleAnalyser;
-import com.github.schmittjoaopedro.analyser.pmd.PMDAnalyser;
-import com.github.schmittjoaopedro.analyser.spotbugs.SpotBugsAnalyser;
-import com.github.schmittjoaopedro.model.Metric;
-import com.github.schmittjoaopedro.model.SourceCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import com.github.schmittjoaopedro.analyser.checkstyle.CheckstyleAnalyser;
+import com.github.schmittjoaopedro.analyser.pmd.PMDAnalyser;
+import com.github.schmittjoaopedro.model.Metric;
+import com.github.schmittjoaopedro.model.SourceCode;
 
 @Service
 public class SourceCodeAnalyser  {
@@ -80,7 +80,7 @@ public class SourceCodeAnalyser  {
 
     private void checkSpotBugs(Metric metric, SourceCode sourceCode) {
         try {
-            SpotBugsAnalyser spotBugsAnalyser = new SpotBugsAnalyser();
+            //SpotBugsAnalyser spotBugsAnalyser = new SpotBugsAnalyser();
             //metric.setSpotBugsMetrics(spotBugsAnalyser.analyse(sourceCode.getSourceCode()));
         } catch (Exception e) {
             logger.error(e);

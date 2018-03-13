@@ -4,7 +4,12 @@ import java.io.Serializable;
 
 public class SpotBugsMetric implements Serializable {
 
-    private String message;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String message;
 
     private String category;
 

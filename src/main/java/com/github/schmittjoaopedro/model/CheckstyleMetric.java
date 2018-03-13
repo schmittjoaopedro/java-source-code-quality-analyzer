@@ -4,7 +4,12 @@ import java.io.Serializable;
 
 public class CheckstyleMetric implements Serializable {
 
-    private int line;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int line;
 
     private String description;
 

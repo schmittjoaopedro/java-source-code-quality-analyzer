@@ -4,7 +4,12 @@ import java.io.Serializable;
 
 public class SourceCode implements Serializable {
 
-    private String sourceCode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String sourceCode;
 
     private boolean pmd;
 

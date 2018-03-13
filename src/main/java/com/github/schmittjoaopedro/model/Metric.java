@@ -6,7 +6,12 @@ import java.util.List;
 
 public class Metric implements Serializable {
 
-    private String id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String id;
 
     private String className;
 
@@ -30,7 +35,15 @@ public class Metric implements Serializable {
         super();
     }
 
-    public List<SpotBugsMetric> getSpotBugsMetrics() {
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public List<SpotBugsMetric> getSpotBugsMetrics() {
         if (spotBugsMetrics == null) spotBugsMetrics = new ArrayList<>();
         return spotBugsMetrics;
     }

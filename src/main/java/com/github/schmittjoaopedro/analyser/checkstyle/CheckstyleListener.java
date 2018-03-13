@@ -1,17 +1,13 @@
 package com.github.schmittjoaopedro.analyser.checkstyle;
 
-import com.github.schmittjoaopedro.model.CheckstyleMetric;
-import com.puppycrawl.tools.checkstyle.api.AuditEvent;
-import com.puppycrawl.tools.checkstyle.api.AuditListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckstyleListener implements AuditListener {
+import com.github.schmittjoaopedro.model.CheckstyleMetric;
+import com.puppycrawl.tools.checkstyle.api.AuditEvent;
+import com.puppycrawl.tools.checkstyle.api.AuditListener;
 
-    private static Logger logger = LogManager.getLogger(CheckstyleListener.class);
+public class CheckstyleListener implements AuditListener {
 
     private List<CheckstyleMetric> checkstyleMetrics;
 

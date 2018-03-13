@@ -4,7 +4,12 @@ import java.io.Serializable;
 
 public class PMDMetric implements Serializable {
 
-    private int beginLine;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int beginLine;
 
     private int endLine;
 

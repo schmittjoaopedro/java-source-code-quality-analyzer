@@ -21,5 +21,10 @@ public class MetricController {
     public Metric getMetrics(@RequestBody SourceCode sourceCode) {
         return metricService.calculateMetric(sourceCode);
     }
+    
+    @RequestMapping(value = "/etl", method = RequestMethod.GET)
+    public void startIndex() {
+    	metricService.createIndex();
+    }
 
 }

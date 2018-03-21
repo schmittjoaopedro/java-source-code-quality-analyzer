@@ -12,6 +12,10 @@ public class Metric implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
+	private Long ruleId;
+	
+	private String sourceCode;
 
     private String className;
 
@@ -41,6 +45,22 @@ public class Metric implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	public String getSourceCode() {
+		return sourceCode;
+	}
+
+	public void setSourceCode(String sourceCode) {
+		this.sourceCode = sourceCode;
 	}
 
 	public List<SpotBugsMetric> getSpotBugsMetrics() {

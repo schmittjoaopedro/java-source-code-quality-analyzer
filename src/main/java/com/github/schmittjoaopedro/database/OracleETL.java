@@ -8,10 +8,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OracleETL {
+
+	@Value("${oracle.database.url}")
+	private String url;
+
+	@Value("${oracle.database.user}")
+	private String user;
+
+	@Value("${oracle.database.pass}")
+	private String pass;
 	
 	public String getSourceCode(Long ruleActionId) {
 		Connection connection = null;
@@ -26,18 +36,22 @@ public class OracleETL {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if(statement != null)
-					statement.close();
-				if(connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnections(connection, statement);
 		}
 		return null;
 	}
-	
+
+	private void closeConnections(Connection connection, Statement statement) {
+		try {
+            if(statement != null)
+                statement.close();
+            if(connection != null)
+                connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+	}
+
 	public List<Long> getRuleActionsId() {
 		Connection connection = null;
 		Statement statement = null;
@@ -54,14 +68,7 @@ public class OracleETL {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if(statement != null)
-					statement.close();
-				if(connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnections(connection, statement);
 		}
 		return null;
 	}
@@ -73,7 +80,7 @@ public class OracleETL {
 			e.printStackTrace();
 		}
         try {
-            return DriverManager.getConnection("url", "user", "pass");
+            return DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
             e.printStackTrace();
         }

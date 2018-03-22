@@ -17,6 +17,8 @@ public class SourceCode implements Serializable {
 
     private boolean checkStyle;
 
+    private String user;
+
     public SourceCode() {
         super();
     }
@@ -51,5 +53,13 @@ public class SourceCode implements Serializable {
 
     public void setCheckStyle(boolean checkStyle) {
         this.checkStyle = checkStyle;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

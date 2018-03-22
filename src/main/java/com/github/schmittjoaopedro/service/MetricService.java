@@ -42,15 +42,14 @@ public class MetricService {
 				@Override
 				public void run() {
 					for(Long id : actionIds) {
-						String javaSource = oracleETL.getSourceCode(id);
-						SourceCode sourceCode = new SourceCode();
-						sourceCode.setSourceCode(javaSource);
+						SourceCode sourceCode = oracleETL.getSourceCode(id);
 						sourceCode.setPmd(true);
 						sourceCode.setCheckStyle(true);
 						sourceCode.setSpotBugs(true);
 						Metric metric = sourceCodeAnalyser.analyse(sourceCode);
 						metric.setRuleId(id);
-						metric.setSourceCode(javaSource);
+						metric.setSourceCode(sourceCode.getSourceCode());
+						metric.setUser(sourceCode.getUser());
 						metricRepository.save(metric);
 					}
 				}

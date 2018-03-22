@@ -14,6 +14,8 @@ public class Metric implements Serializable {
 	private String id;
 	
 	private Long ruleId;
+
+	private String user;
 	
 	private String sourceCode;
 
@@ -136,5 +138,13 @@ public class Metric implements Serializable {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

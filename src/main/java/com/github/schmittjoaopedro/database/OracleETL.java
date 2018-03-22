@@ -8,8 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.schmittjoaopedro.model.SourceCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.xml.transform.Source;
 
 @Service
 public class OracleETL {
@@ -23,16 +26,26 @@ public class OracleETL {
 	@Value("${oracle.database.pass}")
 	private String pass;
 	
-	public String getSourceCode(Long ruleActionId) {
+	public SourceCode getSourceCode(Long ruleActionId) {
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			connection = getConnection();
-			String selectSQL = "SELECT JAVA_SOURCE FROM RULE_ACTION WHERE ID = " + ruleActionId;
+			String selectSQL = "SELECT RA.JAVA_SOURCE, R.USER_CREATED, R.USER_UPDATED FROM RULE_ACTION RA JOIN RULE R ON R.ID = RA.RULE_ID WHERE RA.ID = " + ruleActionId;
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(selectSQL);
 			rs.next();
-			return rs.getString(1);
+			String source = rs.getString(1);
+			String userCreated = rs.getString(2);
+			String userUpdated = rs.getString(3);
+			SourceCode sourceCode = new SourceCode();
+			sourceCode.setSourceCode(source);
+			if(userUpdated == null) {
+				sourceCode.setUser(userCreated);
+			} else {
+				sourceCode.setUser(userUpdated);
+			}
+			return sourceCode;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

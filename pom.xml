@@ -41,6 +41,7 @@
             <artifactId>log4j-core</artifactId>
             <version>2.10.0</version>
         </dependency>
+		<!-- mvn install:install-file -Dfile={path/to/your/ojdbc.jar} -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar -->
         <dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>

@@ -1,10 +1,13 @@
 package com.github.schmittjoaopedro.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import com.github.schmittjoaopedro.analyser.MetricCalculator;
+import com.github.schmittjoaopedro.dto.MetricHeader;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +34,12 @@ public class MetricService {
         return sourceCodeAnalyser.analyse(sourceCode);
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public Metric calculateMetricAndSave(SourceCode sourceCode) {
         return metricRepository.save(sourceCodeAnalyser.analyse(sourceCode));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void createIndex() {
         List<Long> actionIds = oracleETL.getRuleActionsId();
         if (actionIds != null) {
@@ -55,6 +59,29 @@ public class MetricService {
                 }
             }).start();
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<MetricHeader> getMetricRange(Long page, Long limit) {
+        return metricRepository
+                .findAll(PageRequest.of(page.intValue(), limit.intValue()))
+                .getContent()
+                .stream()
+                .map(item ->
+                    new MetricHeader(
+                            item.getId(),
+                            item.getRuleVersionId(),
+                            item.getUserCreated(),
+                            item.getUserUpdated(),
+                            item.getDateCreated(),
+                            item.getDateUpdated(),
+                            item.getClassComplexity()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Metric getMetric(String id) {
+        return metricRepository.findById(id).get();
     }
 
 }

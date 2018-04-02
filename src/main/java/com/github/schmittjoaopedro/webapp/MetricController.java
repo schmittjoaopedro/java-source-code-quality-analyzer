@@ -1,15 +1,13 @@
 package com.github.schmittjoaopedro.webapp;
 
-import javax.annotation.Resource;
-
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.github.schmittjoaopedro.dto.MetricHeader;
 import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.SourceCode;
 import com.github.schmittjoaopedro.service.MetricService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 public class MetricController {
@@ -25,6 +23,16 @@ public class MetricController {
     @RequestMapping(value = "/etl", method = RequestMethod.GET)
     public void startIndex() {
     	metricService.createIndex();
+    }
+
+    @RequestMapping(value = "/metrics", method = RequestMethod.GET)
+    public @ResponseBody  List<MetricHeader> findRange(@RequestParam("page") Long page, @RequestParam("limit") Long limit) {
+        return metricService.getMetricRange(page, limit);
+    }
+
+    @RequestMapping(value = "/metrics/{id}", method = RequestMethod.GET)
+    public @ResponseBody  Metric findRange(@PathVariable("id") String id) {
+        return metricService.getMetric(id);
     }
 
 }

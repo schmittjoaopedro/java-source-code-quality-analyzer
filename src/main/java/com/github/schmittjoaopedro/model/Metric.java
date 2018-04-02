@@ -2,6 +2,7 @@ package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Metric implements Serializable {
@@ -12,10 +13,22 @@ public class Metric implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	
+
 	private Long ruleId;
 
-	private String user;
+	private Long ruleVersionId;
+
+	private Long ruleActionId;
+
+    private String description;
+
+	private String userCreated;
+
+	private String userUpdated;
+
+	private Date dateCreated;
+
+	private Date dateUpdated;
 	
 	private String sourceCode;
 
@@ -30,6 +43,8 @@ public class Metric implements Serializable {
     private double checkStyleComplexity;
 
     private double spotBugsComplexity;
+
+    private long linesNumber;
 
     private List<PMDMetric> pmdMetrics;
 
@@ -140,11 +155,67 @@ public class Metric implements Serializable {
         this.error = error;
     }
 
-    public String getUser() {
-        return user;
+    public Long getRuleVersionId() {
+        return ruleVersionId;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setRuleVersionId(Long ruleVersionId) {
+        this.ruleVersionId = ruleVersionId;
+    }
+
+    public Long getRuleActionId() {
+        return ruleActionId;
+    }
+
+    public void setRuleActionId(Long ruleActionId) {
+        this.ruleActionId = ruleActionId;
+    }
+
+    public String getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(String userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public String getUserUpdated() {
+        return userUpdated;
+    }
+
+    public void setUserUpdated(String userUpdated) {
+        this.userUpdated = userUpdated;
+    }
+
+    public long getLinesNumber() {
+        return linesNumber;
+    }
+
+    public void setLinesNumber(long linesNumber) {
+        this.linesNumber = linesNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public void setDateUpdated(Date dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 }

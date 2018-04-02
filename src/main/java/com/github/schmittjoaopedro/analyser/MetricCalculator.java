@@ -4,9 +4,12 @@ import com.github.schmittjoaopedro.model.CheckstyleMetric;
 import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.PMDMetric;
 import com.github.schmittjoaopedro.model.SpotBugsMetric;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public final class MetricCalculator {
 
@@ -39,6 +42,11 @@ public final class MetricCalculator {
         metric.setSpotBugsComplexity(spotBugsSum);
         // Calculate class complexity
         metric.setClassComplexity(checkStyleSum * 1.0 + pmdSum * 2.0 + spotBugsSum * 4.0);
+        metric.setLinesNumber(getLinesNumber(metric.getSourceCode()));
+    }
+
+    private static long getLinesNumber(String sourceCode) {
+        return Arrays.stream(sourceCode.split("\n")).map(item -> item.replace("\r", StringUtils.EMPTY).trim()).filter(item -> !item.isEmpty()).count();
     }
 
     public static String extractClassNameFromSourceCode(String sourceCode) {

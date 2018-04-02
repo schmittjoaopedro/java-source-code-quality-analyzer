@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.SourceCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,27 +26,41 @@ public class OracleETL {
 
 	@Value("${oracle.database.pass}")
 	private String pass;
+
+	private String ETL_QUERY = "SELECT R.ID AS ID,\n" +
+			"  R.RULE_VERSION_ID AS VERSION_ID,\n" +
+			"  RA.ID AS ACTION_ID,\n" +
+			"  R.DESCRIPTION AS DESCRIPTION,\n" +
+			"  R.USER_CREATED AS USER_CREATED,\n" +
+			"  R.USER_UPDATED AS USER_UPDATED,\n" +
+			"  R.DATE_CREATED AS DATE_CREATED,\n" +
+			"  R.DATE_CREATED AS DATE_UPDATED,\n" +
+			"  RA.JAVA_SOURCE AS SOURCE\n" +
+			"FROM RULE_ACTION RA\n" +
+			"JOIN RULE R\n" +
+			"ON R.ID     = RA.RULE_ID\n" +
+			"WHERE RA.ID = ";
 	
-	public SourceCode getSourceCode(Long ruleActionId) {
+	public Metric getMetric(Long ruleActionId) {
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			connection = getConnection();
-			String selectSQL = "SELECT RA.JAVA_SOURCE, R.USER_CREATED, R.USER_UPDATED FROM RULE_ACTION RA JOIN RULE R ON R.ID = RA.RULE_ID WHERE RA.ID = " + ruleActionId;
+			String selectSQL = ETL_QUERY + ruleActionId;
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(selectSQL);
 			rs.next();
-			String source = rs.getString(1);
-			String userCreated = rs.getString(2);
-			String userUpdated = rs.getString(3);
-			SourceCode sourceCode = new SourceCode();
-			sourceCode.setSourceCode(source);
-			if(userUpdated == null) {
-				sourceCode.setUser(userCreated);
-			} else {
-				sourceCode.setUser(userUpdated);
-			}
-			return sourceCode;
+			Metric metric = new Metric();
+			metric.setRuleId(rs.getLong(1));
+			metric.setRuleVersionId(rs.getLong(2));
+			metric.setRuleActionId(rs.getLong(3));
+			metric.setDescription(rs.getString(4));
+			metric.setUserCreated(rs.getString(5));
+			metric.setUserUpdated(rs.getString(6));
+			metric.setDateCreated(rs.getTimestamp(7));
+			metric.setDateUpdated(rs.getTimestamp(8));
+			metric.setSourceCode(rs.getString(9));
+			return metric;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

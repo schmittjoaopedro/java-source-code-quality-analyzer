@@ -10,7 +10,7 @@ import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.SourceCode;
 
 @Service
-public class SourceCodeAnalyser  {
+public class SourceCodeAnalyser {
 
     private static Logger logger = LogManager.getLogger(SourceCodeAnalyser.class);
 
@@ -34,16 +34,21 @@ public class SourceCodeAnalyser  {
 
     public Metric analyse(SourceCode sourceCode) {
         Metric metric = new Metric();
+        analyse(sourceCode, metric);
+        return metric;
+    }
+
+    public void analyse(SourceCode sourceCode, Metric metric) {
         if (sourceCode.getSourceCode() != null) {
             try {
                 metric.setClassName(MetricCalculator.extractClassNameFromSourceCode(sourceCode.getSourceCode()));
-                if(sourceCode.isCheckStyle()) {
+                if (sourceCode.isCheckStyle()) {
                     checkStyle(metric, sourceCode);
                 }
-                if(sourceCode.isPmd()) {
+                if (sourceCode.isPmd()) {
                     checkPmd(metric, sourceCode);
                 }
-                if(sourceCode.isSpotBugs()) {
+                if (sourceCode.isSpotBugs()) {
                     checkSpotBugs(metric, sourceCode);
                 }
                 MetricCalculator.calculate(metric);
@@ -54,8 +59,6 @@ public class SourceCodeAnalyser  {
         } else {
             metric.setError("Empty source code!");
         }
-
-        return metric;
     }
 
     private void checkPmd(Metric metric, SourceCode sourceCode) {

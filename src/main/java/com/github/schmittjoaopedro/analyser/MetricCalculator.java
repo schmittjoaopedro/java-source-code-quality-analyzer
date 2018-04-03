@@ -43,6 +43,7 @@ public final class MetricCalculator {
         // Calculate class complexity
         metric.setClassComplexity(checkStyleSum * 1.0 + pmdSum * 2.0 + spotBugsSum * 4.0);
         metric.setLinesNumber(getLinesNumber(metric.getSourceCode()));
+        metric.setComplexityFactor(metric.getClassComplexity() / metric.getLinesNumber());
     }
 
     private static long getLinesNumber(String sourceCode) {

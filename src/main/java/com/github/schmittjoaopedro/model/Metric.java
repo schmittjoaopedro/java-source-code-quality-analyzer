@@ -46,6 +46,10 @@ public class Metric implements Serializable {
 
     private long linesNumber;
 
+    private double complexityFactor;
+
+    private double percentage;
+
     private List<PMDMetric> pmdMetrics;
 
     private List<SpotBugsMetric> spotBugsMetrics;
@@ -217,5 +221,21 @@ public class Metric implements Serializable {
 
     public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public double getComplexityFactor() {
+        return complexityFactor;
+    }
+
+    public void setComplexityFactor(double complexityFactor) {
+        this.complexityFactor = complexityFactor;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
     }
 }

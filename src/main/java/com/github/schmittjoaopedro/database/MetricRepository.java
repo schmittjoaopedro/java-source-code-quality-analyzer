@@ -6,4 +6,6 @@ import com.github.schmittjoaopedro.model.Metric;
 
 public interface MetricRepository extends MongoRepository<Metric, String> {
 
+    Long countByComplexityFactorGreaterThan(double complexityFactor);
+
 }

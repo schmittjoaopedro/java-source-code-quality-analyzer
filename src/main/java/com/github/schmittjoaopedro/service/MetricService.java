@@ -31,7 +31,11 @@ public class MetricService {
     private OracleETL oracleETL;
 
     public Metric calculateMetric(SourceCode sourceCode) {
-        return sourceCodeAnalyser.analyse(sourceCode);
+        Metric metric = sourceCodeAnalyser.analyse(sourceCode);
+        long total = metricRepository.count();
+        long lessThan = metricRepository.countByComplexityFactorGreaterThan(metric.getComplexityFactor());
+        metric.setPercentage((double) lessThan / total);
+        return metric;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

@@ -34,6 +34,7 @@ public class SourceCodeAnalyser {
 
     public Metric analyse(SourceCode sourceCode) {
         Metric metric = new Metric();
+        metric.setSourceCode(sourceCode.getSourceCode());
         analyse(sourceCode, metric);
         return metric;
     }

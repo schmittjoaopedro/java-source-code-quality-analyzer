@@ -1,3 +1,93 @@
 # Build and run
 mvn package -DskipTests && cd target && java -jar java-source-code-quality-analyzer-1.0.0.jar
 mvn spring-boot:run
+
+
+# MongoDB Reference
+
+db.metric.find({}, {classComplexity: 1, user:1})
+
+db.metric.aggregate(
+	[
+		{
+			$group: {
+				_id: "$userUpdated",
+				avgClass: {
+					$avg: "$classComplexity"
+				}
+			}
+		},
+		{
+			$sort: { avgClass: -1 }
+		}
+	]
+)
+
+db.metric.createIndex(
+	{
+		classComplexity:1
+	}
+)
+
+db.metric.find(
+	{},
+	{
+		classComplexity:1,
+		ruleId:1,
+		user: 1
+	}
+).sort(
+	{
+		classComplexity:-1
+	}
+)
+
+
+
+db.metric.aggregate(
+	[
+		{
+			$project: {
+				ruleId: 1,
+				userCreated: 1,
+				lineFactor: {
+					$divide: [ "$classComplexity", "$linesNumber" ]
+				}
+			}
+		},
+		{
+			$group: {
+				_id: "$userCreated",
+				avgClass: {
+					$avg: "$lineFactor"
+				}
+			}
+		},
+		{
+			$sort: { avgClass: -1 }
+		}
+   ]
+)
+
+db.metric.find().snapshot().forEach(
+    function (elem) {
+        db.metric.update(
+            {
+                _id: elem._id
+            },
+            {
+                $set: {
+                    complexityFactor: elem.classComplexity / elem.linesNumber
+                }
+            }
+        );
+    }
+);
+
+db.metric.count(
+    {
+        complexityFactor: {
+            $lt: 4
+        }
+    }
+)

@@ -29,8 +29,6 @@ public class Metric implements Serializable {
 	private Date dateCreated;
 
 	private Date dateUpdated;
-	
-	private String sourceCode;
 
     private String className;
 
@@ -55,6 +53,8 @@ public class Metric implements Serializable {
     private double complexityFactor;
 
     private double percentage;
+
+    private String sourceCode;
 
     private List<PMDMetric> pmdMetrics;
 

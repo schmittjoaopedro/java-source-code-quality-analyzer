@@ -1,12 +1,14 @@
 package com.github.schmittjoaopedro.service;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import com.github.schmittjoaopedro.analyser.MetricCalculator;
 import com.github.schmittjoaopedro.dto.MetricHeader;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +22,8 @@ import com.github.schmittjoaopedro.model.SourceCode;
 
 @Service
 public class MetricService {
+
+    private static org.apache.logging.log4j.Logger logger = LogManager.getLogger(MetricService.class);
 
     @Resource
     private MetricRepository metricRepository;
@@ -50,6 +54,7 @@ public class MetricService {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    int count = 0;
                     for (Long id : actionIds) {
                         Metric metric = oracleETL.getMetric(id);
                         SourceCode sourceCode = new SourceCode();
@@ -59,6 +64,9 @@ public class MetricService {
                         sourceCode.setSourceCode(metric.getSourceCode());
                         sourceCodeAnalyser.analyse(sourceCode, metric);
                         metricRepository.save(metric);
+                        if(id % 100 == 0) {
+                            logger.info("Imported: " + (++count) / actionIds.size());
+                        }
                     }
                 }
             }).start();

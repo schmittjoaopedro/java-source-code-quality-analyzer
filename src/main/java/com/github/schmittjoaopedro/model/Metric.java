@@ -46,6 +46,12 @@ public class Metric implements Serializable {
 
     private long linesNumber;
 
+    private long notEmptyLinesNumber;
+
+    private long uncommentedLinesNumber;
+
+    private long normalizedLinesNumber;
+
     private double complexityFactor;
 
     private double percentage;
@@ -237,5 +243,29 @@ public class Metric implements Serializable {
 
     public void setPercentage(double percentage) {
         this.percentage = percentage;
+    }
+
+    public long getUncommentedLinesNumber() {
+        return uncommentedLinesNumber;
+    }
+
+    public void setUncommentedLinesNumber(long uncommentedLinesNumber) {
+        this.uncommentedLinesNumber = uncommentedLinesNumber;
+    }
+
+    public long getNotEmptyLinesNumber() {
+        return notEmptyLinesNumber;
+    }
+
+    public void setNotEmptyLinesNumber(long notEmptyLinesNumber) {
+        this.notEmptyLinesNumber = notEmptyLinesNumber;
+    }
+
+    public long getNormalizedLinesNumber() {
+        return normalizedLinesNumber;
+    }
+
+    public void setNormalizedLinesNumber(long normalizedLinesNumber) {
+        this.normalizedLinesNumber = normalizedLinesNumber;
     }
 }

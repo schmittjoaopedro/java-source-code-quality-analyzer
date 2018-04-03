@@ -43,11 +43,30 @@ public final class MetricCalculator {
         // Calculate class complexity
         metric.setClassComplexity(checkStyleSum * 1.0 + pmdSum * 2.0 + spotBugsSum * 4.0);
         metric.setLinesNumber(getLinesNumber(metric.getSourceCode()));
-        metric.setComplexityFactor(metric.getClassComplexity() / metric.getLinesNumber());
+        metric.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSourceCode()));
+        metric.setUncommentedLinesNumber(getUncommentedLinesNumber(metric.getSourceCode()));
+        metric.setNormalizedLinesNumber(getNormalizedLinesNumber(metric.getSourceCode()));
+        metric.setComplexityFactor(metric.getClassComplexity() / metric.getNormalizedLinesNumber());
     }
 
     private static long getLinesNumber(String sourceCode) {
+        return Arrays.stream(sourceCode.split("\n")).count();
+    }
+
+    private static long getNotEmptyLinesNumber(String sourceCode) {
         return Arrays.stream(sourceCode.split("\n")).map(item -> item.replace("\r", StringUtils.EMPTY).trim()).filter(item -> !item.isEmpty()).count();
+    }
+
+    private static long getUncommentedLinesNumber(String sourceCode) {
+        String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
+        sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        return getLinesNumber(sourceCodeFiltered);
+    }
+
+    private static long getNormalizedLinesNumber(String sourceCode) {
+        String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
+        sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        return getNotEmptyLinesNumber(sourceCodeFiltered);
     }
 
     public static String extractClassNameFromSourceCode(String sourceCode) {

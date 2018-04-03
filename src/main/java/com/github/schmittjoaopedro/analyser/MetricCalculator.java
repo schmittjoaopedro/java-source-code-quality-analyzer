@@ -58,14 +58,16 @@ public final class MetricCalculator {
     }
 
     private static long getUncommentedLinesNumber(String sourceCode) {
-        String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
-        sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        //String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
+        //sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        String sourceCodeFiltered = sourceCode.replaceAll("((['\"])(?:(?!\\2|\\\\).|\\\\.)*\\2)|\\/\\/[^\\n]*|\\/\\*(?:[^*]|\\*(?!\\/))*\\*\\/", StringUtils.EMPTY);
         return getLinesNumber(sourceCodeFiltered);
     }
 
     private static long getNormalizedLinesNumber(String sourceCode) {
-        String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
-        sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        //String sourceCodeFiltered = sourceCode.replaceAll("/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/", StringUtils.EMPTY);
+        //sourceCodeFiltered = sourceCodeFiltered.replaceAll("[^:]\\/\\/.*", StringUtils.EMPTY);
+        String sourceCodeFiltered = sourceCode.replaceAll("((['\"])(?:(?!\\2|\\\\).|\\\\.)*\\2)|\\/\\/[^\\n]*|\\/\\*(?:[^*]|\\*(?!\\/))*\\*\\/", StringUtils.EMPTY);
         return getNotEmptyLinesNumber(sourceCodeFiltered);
     }
 

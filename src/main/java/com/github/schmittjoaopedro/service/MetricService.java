@@ -56,16 +56,18 @@ public class MetricService {
                 public void run() {
                     int count = 0;
                     for (Long id : actionIds) {
-                        Metric metric = oracleETL.getMetric(id);
-                        SourceCode sourceCode = new SourceCode();
-                        sourceCode.setPmd(true);
-                        sourceCode.setCheckStyle(true);
-                        sourceCode.setSpotBugs(true);
-                        sourceCode.setSourceCode(metric.getSourceCode());
-                        sourceCodeAnalyser.analyse(sourceCode, metric);
-                        metricRepository.save(metric);
-                        if(id % 100 == 0) {
-                            logger.info("Imported: " + (++count) / actionIds.size());
+                        try {
+                            Metric metric = oracleETL.getMetric(id);
+                            SourceCode sourceCode = new SourceCode();
+                            sourceCode.setPmd(true);
+                            sourceCode.setCheckStyle(true);
+                            sourceCode.setSpotBugs(true);
+                            sourceCode.setSourceCode(metric.getSourceCode());
+                            sourceCodeAnalyser.analyse(sourceCode, metric);
+                            metricRepository.save(metric);
+                        } catch (Exception ex) {
+                            logger.error(ex);
+                            logger.error("Error on load " + id);
                         }
                     }
                 }

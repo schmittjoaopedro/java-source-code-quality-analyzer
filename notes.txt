@@ -1,3 +1,5 @@
+# For regex -Xss250m
+
 # Build and run
 mvn package -DskipTests && cd target && java -jar java-source-code-quality-analyzer-1.0.0.jar
 mvn spring-boot:run

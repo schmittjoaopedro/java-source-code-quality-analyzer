@@ -55,6 +55,7 @@ public class SourceCodeAnalyser {
                 MetricCalculator.calculate(metric);
             } catch (Exception e) {
                 logger.error(e);
+                logger.error("Error on load " + metric.getRuleVersionId());
                 metric.setError(e.getMessage());
             }
         } else {

@@ -2,7 +2,7 @@
 
 # Build and run
 mvn package -DskipTests && cd target && java -jar java-source-code-quality-analyzer-1.0.0.jar
-mvn spring-boot:run
+mvn spring-boot:run -Drun.jvmArguments="-Xss250m"
 
 
 # MongoDB Reference

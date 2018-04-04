@@ -35,11 +35,18 @@ public class MetricService {
     private OracleETL oracleETL;
 
     public Metric calculateMetric(SourceCode sourceCode) {
-        Metric metric = sourceCodeAnalyser.analyse(sourceCode);
-        long total = metricRepository.count();
-        long lessThan = metricRepository.countByComplexityFactorGreaterThan(metric.getComplexityFactor());
-        metric.setPercentage((double) lessThan / total);
-        return metric;
+        Metric metric = null;
+        try {
+            metric = sourceCodeAnalyser.analyse(sourceCode);
+            long total = metricRepository.count();
+            long lessThan = metricRepository.countByComplexityFactorGreaterThan(metric.getComplexityFactor());
+            metric.setPercentage((double) lessThan / total);
+            return metric;
+        } catch (Exception ex) {
+            metric = new Metric();
+            metric.setError(ex.getMessage() + "\n" + ex.getCause());
+            return metric;
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -51,24 +58,20 @@ public class MetricService {
     public void createIndex() {
         List<Long> actionIds = oracleETL.getRuleActionsId();
         if (actionIds != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    int count = 0;
-                    for (Long id : actionIds) {
-                        try {
-                            Metric metric = oracleETL.getMetric(id);
-                            SourceCode sourceCode = new SourceCode();
-                            sourceCode.setPmd(true);
-                            sourceCode.setCheckStyle(true);
-                            sourceCode.setSpotBugs(true);
-                            sourceCode.setSourceCode(metric.getSourceCode());
-                            sourceCodeAnalyser.analyse(sourceCode, metric);
-                            metricRepository.save(metric);
-                        } catch (Exception ex) {
-                            logger.error(ex);
-                            logger.error("Error on load " + id);
-                        }
+            new Thread(() -> {
+                for (Long id : actionIds) {
+                    try {
+                        Metric metric = oracleETL.getMetric(id);
+                        SourceCode sourceCode = new SourceCode();
+                        sourceCode.setPmd(true);
+                        sourceCode.setCheckStyle(true);
+                        sourceCode.setSpotBugs(true);
+                        sourceCode.setSourceCode(metric.getSourceCode());
+                        sourceCodeAnalyser.analyse(sourceCode, metric);
+                        metricRepository.save(metric);
+                    } catch (Exception ex) {
+                        logger.error(ex);
+                        logger.error("Error on load " + id);
                     }
                 }
             }).start();

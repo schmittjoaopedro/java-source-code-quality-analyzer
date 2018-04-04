@@ -56,7 +56,7 @@ public class SourceCodeAnalyser {
             } catch (Exception e) {
                 logger.error(e);
                 logger.error("Error on load " + metric.getRuleVersionId());
-                metric.setError(e.getMessage());
+                throw new RuntimeException(e);
             }
         } else {
             metric.setError("Empty source code!");
@@ -70,6 +70,7 @@ public class SourceCodeAnalyser {
         } catch (Exception e) {
             logger.error(e);
             metric.setError(metric.getError() + "\nPMD error:" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -80,6 +81,7 @@ public class SourceCodeAnalyser {
         } catch (Exception e) {
             logger.error(e);
             metric.setError(metric.getError() + "\nCheckStyle error:" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

@@ -39,7 +39,7 @@ public class OracleETL {
 			"FROM RULE_ACTION RA\n" +
 			"JOIN RULE R\n" +
 			"ON R.ID     = RA.RULE_ID\n" +
-			"WHERE R.STATUS = 2 AND RA.ID = ";
+			"WHERE RA.ID = ";
 	
 	public Metric getMetric(Long ruleActionId) {
 		Connection connection = null;
@@ -86,7 +86,7 @@ public class OracleETL {
 		try {
 			List<Long> ids = new ArrayList<>();
 			connection = getConnection();
-			String selectIdsSQL = "SELECT DISTINCT ID FROM RULE_ACTION WHERE JAVA_SOURCE IS NOT NULL";
+			String selectIdsSQL = "SELECT DISTINCT RA.ID FROM RULE_ACTION RA INNER JOIN RULE R ON R.ID = RA.RULE_ID WHERE RA.JAVA_SOURCE IS NOT NULL AND R.STATUS = 2";
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(selectIdsSQL);
 			while(rs.next()) {

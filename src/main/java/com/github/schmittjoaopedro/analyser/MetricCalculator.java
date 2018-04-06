@@ -46,7 +46,7 @@ public final class MetricCalculator {
         metric.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSourceCode()));
         metric.setUncommentedLinesNumber(getUncommentedLinesNumber(metric.getSourceCode()));
         metric.setNormalizedLinesNumber(getNormalizedLinesNumber(metric.getSourceCode()));
-        metric.setComplexityFactor(metric.getClassComplexity() / metric.getNormalizedLinesNumber());
+        metric.setComplexityFactor(metric.getClassComplexity() / Math.max(1.0, metric.getNormalizedLinesNumber())); // Evict division by zero
     }
 
     private static long getLinesNumber(String sourceCode) {

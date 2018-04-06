@@ -39,7 +39,7 @@ public class OracleETL {
 			"FROM RULE_ACTION RA\n" +
 			"JOIN RULE R\n" +
 			"ON R.ID     = RA.RULE_ID\n" +
-			"WHERE RA.ID = ";
+			"WHERE R.STATUS = 2 AND RA.ID = ";
 	
 	public Metric getMetric(Long ruleActionId) {
 		Connection connection = null;

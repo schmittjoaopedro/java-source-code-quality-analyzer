@@ -51,15 +51,17 @@ public class OracleETL {
 			ResultSet rs = statement.executeQuery(selectSQL);
 			rs.next();
 			Metric metric = new Metric();
-			metric.setRuleId(rs.getLong(1));
-			metric.setRuleVersionId(rs.getLong(2));
-			metric.setRuleActionId(rs.getLong(3));
-			metric.setDescription(rs.getString(4));
-			metric.setUserCreated(rs.getString(5));
-			metric.setUserUpdated(rs.getString(6));
-			metric.setDateCreated(rs.getTimestamp(7));
-			metric.setDateUpdated(rs.getTimestamp(8));
-			metric.setSourceCode(rs.getString(9));
+			SourceCode sourceCode = new SourceCode();
+            sourceCode.setRuleId(rs.getLong(1));
+            sourceCode.setRuleVersionId(rs.getLong(2));
+            sourceCode.setRuleActionId(rs.getLong(3));
+            sourceCode.setDescription(rs.getString(4));
+            sourceCode.setUserCreated(rs.getString(5));
+            sourceCode.setUserUpdated(rs.getString(6));
+            sourceCode.setDateCreated(rs.getTimestamp(7));
+            sourceCode.setDateUpdated(rs.getTimestamp(8));
+            sourceCode.setSourceCode(rs.getString(9));
+            metric.setSourceCode(sourceCode);
 			return metric;
 		} catch (Exception e) {
 			e.printStackTrace();

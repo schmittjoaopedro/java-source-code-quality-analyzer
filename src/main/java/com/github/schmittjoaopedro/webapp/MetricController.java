@@ -16,8 +16,8 @@ public class MetricController {
 	private MetricService metricService;
 	
     @RequestMapping(value = "/metrics", method = RequestMethod.POST)
-    public Metric getMetrics(@RequestBody SourceCode sourceCode) {
-        return metricService.calculateMetric(sourceCode);
+    public Metric getMetrics(@RequestBody Metric metric) {
+        return metricService.calculateMetric(metric);
     }
     
     @RequestMapping(value = "/etl", method = RequestMethod.GET)

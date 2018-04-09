@@ -19,12 +19,7 @@ public class PMDAnalyser {
     private static Logger logger = LogManager.getLogger(PMDAnalyser.class);
 
     public List<PMDMetric> analyse(String sourceCode) throws Exception {
-        /*RuleSets ruleSets = new RuleSets();
-        new RuleSetFactory().getRegisteredRuleSets().forEachRemaining(ruleSet -> {
-            ruleSets.addRuleSet(ruleSet);
-        });
-        pmd.getSourceCodeProcessor().processSourceCode(stream, ruleSets, ctx);*/
-		List<PMDMetric> metrics = new ArrayList<>();
+        List<PMDMetric> metrics = new ArrayList<>();
         Iterator<RuleSet> ruleSet = new RuleSetFactory().getRegisteredRuleSets();
         while(ruleSet.hasNext()) {
         	try {
@@ -50,6 +45,7 @@ public class PMDAnalyser {
                     pmdMetric.setDescription(violation.getDescription());
                     pmdMetric.setRule(violation.getRule().getDescription());
                     pmdMetric.setMessage(violation.getRule().getMessage());
+                    pmdMetric.setName(violation.getRule().getName());
                     pmdMetric.setPriority(violation.getRule().getPriority().getPriority());
                     metrics.add(pmdMetric);
                 });

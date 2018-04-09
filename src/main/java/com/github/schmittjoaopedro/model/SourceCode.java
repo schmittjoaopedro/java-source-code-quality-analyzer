@@ -1,6 +1,7 @@
 package com.github.schmittjoaopedro.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class SourceCode implements Serializable {
 
@@ -9,18 +10,100 @@ public class SourceCode implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String sourceCode;
+    private Long ruleId;
 
-    private boolean pmd;
+    private Long ruleVersionId;
 
-    private boolean spotBugs;
+    private Long ruleActionId;
 
-    private boolean checkStyle;
+    private String description;
 
-    private String user;
+    private String userCreated;
+
+    private String userUpdated;
+
+    private Date dateCreated;
+
+    private Date dateUpdated;
+
+    private String className;
+
+    private String sourceCode;
 
     public SourceCode() {
         super();
+    }
+
+    public Long getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(Long ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public Long getRuleVersionId() {
+        return ruleVersionId;
+    }
+
+    public void setRuleVersionId(Long ruleVersionId) {
+        this.ruleVersionId = ruleVersionId;
+    }
+
+    public Long getRuleActionId() {
+        return ruleActionId;
+    }
+
+    public void setRuleActionId(Long ruleActionId) {
+        this.ruleActionId = ruleActionId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(String userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public String getUserUpdated() {
+        return userUpdated;
+    }
+
+    public void setUserUpdated(String userUpdated) {
+        this.userUpdated = userUpdated;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public void setDateUpdated(Date dateUpdated) {
+        this.dateUpdated = dateUpdated;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getSourceCode() {
@@ -31,35 +114,4 @@ public class SourceCode implements Serializable {
         this.sourceCode = sourceCode;
     }
 
-    public boolean isPmd() {
-        return pmd;
-    }
-
-    public void setPmd(boolean pmd) {
-        this.pmd = pmd;
-    }
-
-    public boolean isSpotBugs() {
-        return spotBugs;
-    }
-
-    public void setSpotBugs(boolean spotBugs) {
-        this.spotBugs = spotBugs;
-    }
-
-    public boolean isCheckStyle() {
-        return checkStyle;
-    }
-
-    public void setCheckStyle(boolean checkStyle) {
-        this.checkStyle = checkStyle;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
 }

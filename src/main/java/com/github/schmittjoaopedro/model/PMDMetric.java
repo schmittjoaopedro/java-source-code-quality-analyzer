@@ -9,6 +9,8 @@ public class PMDMetric implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private String name;
+
 	private int beginLine;
 
     private int endLine;
@@ -27,6 +29,14 @@ public class PMDMetric implements Serializable {
 
     public PMDMetric() {
         super();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getBeginLine() {

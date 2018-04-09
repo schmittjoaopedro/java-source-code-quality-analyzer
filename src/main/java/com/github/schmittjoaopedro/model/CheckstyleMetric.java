@@ -11,12 +11,22 @@ public class CheckstyleMetric implements Serializable {
 
 	private int line;
 
+	private String name;
+
     private String description;
 
     private int severityLevel;
 
     public CheckstyleMetric() {
         super();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getLine() {

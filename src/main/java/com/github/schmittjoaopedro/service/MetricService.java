@@ -34,13 +34,9 @@ public class MetricService {
     @Resource
     private OracleETL oracleETL;
 
-    public Metric calculateMetric(SourceCode sourceCode) {
-        Metric metric = null;
+    public Metric calculateMetric(Metric metric) {
         try {
-            metric = sourceCodeAnalyser.analyse(sourceCode);
-            long total = metricRepository.count();
-            long lessThan = metricRepository.countByComplexityFactorGreaterThan(metric.getComplexityFactor());
-            metric.setPercentage((double) lessThan / total);
+            sourceCodeAnalyser.analyse(metric);
             return metric;
         } catch (Exception ex) {
             metric = new Metric();
@@ -62,12 +58,9 @@ public class MetricService {
                 for (Long id : actionIds) {
                     try {
                         Metric metric = oracleETL.getMetric(id);
-                        SourceCode sourceCode = new SourceCode();
-                        sourceCode.setPmd(true);
-                        sourceCode.setCheckStyle(true);
-                        sourceCode.setSpotBugs(true);
-                        sourceCode.setSourceCode(metric.getSourceCode());
-                        sourceCodeAnalyser.analyse(sourceCode, metric);
+                        metric.setPmd(true);
+                        metric.setCheckStyle(true);
+                        sourceCodeAnalyser.analyse(metric);
                         metricRepository.save(metric);
                     } catch (Exception ex) {
                         logger.error(ex);
@@ -87,12 +80,12 @@ public class MetricService {
                 .map(item ->
                     new MetricHeader(
                             item.getId(),
-                            item.getRuleVersionId(),
-                            item.getUserCreated(),
-                            item.getUserUpdated(),
-                            item.getDateCreated(),
-                            item.getDateUpdated(),
-                            item.getClassComplexity()))
+                            item.getSourceCode().getRuleVersionId(),
+                            item.getSourceCode().getUserCreated(),
+                            item.getSourceCode().getUserUpdated(),
+                            item.getSourceCode().getDateCreated(),
+                            item.getSourceCode().getDateUpdated(),
+                            null))
                 .collect(Collectors.toList());
     }
 

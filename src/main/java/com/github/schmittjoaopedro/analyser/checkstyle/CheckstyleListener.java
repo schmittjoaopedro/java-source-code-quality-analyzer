@@ -29,6 +29,7 @@ public class CheckstyleListener implements AuditListener {
         checkstyleMetric.setLine(auditEvent.getLocalizedMessage().getLineNo());
         checkstyleMetric.setDescription(auditEvent.getLocalizedMessage().getMessage());
         checkstyleMetric.setSeverityLevel(auditEvent.getLocalizedMessage().getSeverityLevel().ordinal());
+        checkstyleMetric.setName(auditEvent.getLocalizedMessage().getSourceName());
         getCheckstyleMetrics().add(checkstyleMetric);
     }
 

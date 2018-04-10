@@ -1,5 +1,7 @@
 package com.github.schmittjoaopedro.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -96,5 +98,13 @@ public class Metric implements Serializable {
 
     public void setCheckstyleMetrics(List<CheckstyleMetric> checkstyleMetrics) {
         this.checkstyleMetrics = checkstyleMetrics;
+    }
+
+    public String getSource() {
+        if(this.getSourceCode() == null || this.getSourceCode().getSourceCode() == null) {
+            return StringUtils.EMPTY;
+        } else {
+            return this.getSourceCode().getSourceCode();
+        }
     }
 }

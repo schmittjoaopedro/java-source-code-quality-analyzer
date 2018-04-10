@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,11 +22,12 @@ public class PMDAnalyser {
     public List<PMDMetric> analyse(String sourceCode) throws Exception {
         List<PMDMetric> metrics = new ArrayList<>();
         Iterator<RuleSet> ruleSet = new RuleSetFactory().getRegisteredRuleSets();
-        while(ruleSet.hasNext()) {
-        	try {
-        		RuleSets ruleSets = new RuleSets();
-        		ruleSets.addRuleSet(ruleSet.next());
-        		LanguageVersion languageVersion = LanguageRegistry.getDefaultLanguage().getDefaultVersion();
+        while (ruleSet.hasNext()) {
+            RuleSet current = ruleSet.next();
+            try {
+                RuleSets ruleSets = new RuleSets();
+                ruleSets.addRuleSet(current);
+                LanguageVersion languageVersion = LanguageRegistry.getDefaultLanguage().getDefaultVersion();
                 InputStream stream = new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8));
                 PMD pmd = new PMD();
                 pmd.getConfiguration().setDefaultLanguageVersion(languageVersion);
@@ -35,25 +37,31 @@ public class PMDAnalyser {
                 ctx.setSourceCodeFilename("n/a");
                 ctx.setLanguageVersion(languageVersion);
                 ctx.setIgnoreExceptions(false);
-        		pmd.getSourceCodeProcessor().processSourceCode(stream, ruleSets, ctx);
+                pmd.getSourceCodeProcessor().processSourceCode(stream, ruleSets, ctx);
                 report.iterator().forEachRemaining(violation -> {
-                    PMDMetric pmdMetric = new PMDMetric();
-                    pmdMetric.setBeginLine(violation.getBeginLine());
-                    pmdMetric.setBeginColumn(violation.getBeginColumn());
-                    pmdMetric.setEndLine(violation.getEndLine());
-                    pmdMetric.setEndColumn(violation.getEndColumn());
-                    pmdMetric.setDescription(violation.getDescription());
-                    pmdMetric.setRule(violation.getRule().getDescription());
-                    pmdMetric.setMessage(violation.getRule().getMessage());
-                    pmdMetric.setName(violation.getRule().getName());
-                    pmdMetric.setPriority(violation.getRule().getPriority().getPriority());
-                    metrics.add(pmdMetric);
+                    if(!ignoreRule(violation)) {
+                        PMDMetric pmdMetric = new PMDMetric();
+                        pmdMetric.setBeginLine(violation.getBeginLine());
+                        pmdMetric.setBeginColumn(violation.getBeginColumn());
+                        pmdMetric.setEndLine(violation.getEndLine());
+                        pmdMetric.setEndColumn(violation.getEndColumn());
+                        pmdMetric.setDescription(violation.getDescription());
+                        pmdMetric.setRule(violation.getRule().getDescription());
+                        pmdMetric.setMessage(violation.getRule().getMessage());
+                        pmdMetric.setName(violation.getRule().getName());
+                        pmdMetric.setPriority(violation.getRule().getPriority().getPriority());
+                        metrics.add(pmdMetric);
+                    }
                 });
-        	} catch (Exception e) {
-				logger.error(e);
-			}
+            } catch (Exception e) {
+                logger.error(e);
+            }
         }
         return metrics;
+    }
+
+    private boolean ignoreRule(RuleViolation ruleViolation) {
+        return ruleViolation.getRule().getName().equals("LawOfDemeter");
     }
 
 }

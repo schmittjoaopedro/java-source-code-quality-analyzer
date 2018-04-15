@@ -1,6 +1,7 @@
 package com.github.schmittjoaopedro.analyser;
 
 import com.github.schmittjoaopedro.analyser.checkstyle.CheckstyleAnalyser;
+import com.github.schmittjoaopedro.analyser.complexity.CyclomaticComplexityAnalyser;
 import com.github.schmittjoaopedro.analyser.pmd.PMDAnalyser;
 import com.github.schmittjoaopedro.model.Metric;
 import com.github.schmittjoaopedro.model.SourceCode;
@@ -32,6 +33,9 @@ public class SourceCodeAnalyser {
                 if (metric.isPmd()) {
                     checkPmd(metric, sourceCode);
                 }
+                if (metric.isCyclomaticComplexity()) {
+                    cyclomaticComplexity(metric, sourceCode);
+                }
                 MetricCalculator.calculate(metric);
             } catch (Exception e) {
                 logger.error(e);
@@ -40,6 +44,17 @@ public class SourceCodeAnalyser {
             }
         } else {
             metric.setError("Empty source code!");
+        }
+    }
+
+    private void cyclomaticComplexity(Metric metric, SourceCode sourceCode) {
+        try {
+            CyclomaticComplexityAnalyser cyclomaticComplexityAnalyser = new CyclomaticComplexityAnalyser();
+            metric.setCyclomaticComplexities(cyclomaticComplexityAnalyser.analyse(sourceCode.getSourceCode()));
+        } catch (Exception e) {
+            logger.error(e);
+            metric.setError(metric.getError() + "\nCyclomatic complexity error:" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

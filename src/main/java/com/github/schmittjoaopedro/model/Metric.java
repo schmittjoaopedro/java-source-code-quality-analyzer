@@ -26,9 +26,13 @@ public class Metric implements Serializable {
 
     private boolean checkStyle;
 
+    private boolean cyclomaticComplexity;
+
     private List<PMDMetric> pmdMetrics;
 
     private List<CheckstyleMetric> checkstyleMetrics;
+
+    private List<CyclomaticComplexity> cyclomaticComplexities;
 
     public Metric() {
         super();
@@ -82,6 +86,14 @@ public class Metric implements Serializable {
         this.checkStyle = checkStyle;
     }
 
+    public boolean isCyclomaticComplexity() {
+        return cyclomaticComplexity;
+    }
+
+    public void setCyclomaticComplexity(boolean cyclomaticComplexity) {
+        this.cyclomaticComplexity = cyclomaticComplexity;
+    }
+
     public List<PMDMetric> getPmdMetrics() {
         if(pmdMetrics == null) pmdMetrics = new ArrayList<>();
         return pmdMetrics;
@@ -98,6 +110,17 @@ public class Metric implements Serializable {
 
     public void setCheckstyleMetrics(List<CheckstyleMetric> checkstyleMetrics) {
         this.checkstyleMetrics = checkstyleMetrics;
+    }
+
+    public List<CyclomaticComplexity> getCyclomaticComplexities() {
+        if(cyclomaticComplexities == null) {
+            cyclomaticComplexities = new ArrayList<>();
+        }
+        return cyclomaticComplexities;
+    }
+
+    public void setCyclomaticComplexities(List<CyclomaticComplexity> cyclomaticComplexities) {
+        this.cyclomaticComplexities = cyclomaticComplexities;
     }
 
     public String getSource() {

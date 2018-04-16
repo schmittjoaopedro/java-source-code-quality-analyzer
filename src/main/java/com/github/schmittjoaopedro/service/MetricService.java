@@ -60,6 +60,7 @@ public class MetricService {
                         Metric metric = oracleETL.getMetric(id);
                         metric.setPmd(true);
                         metric.setCheckStyle(true);
+                        metric.setCyclomaticComplexity(true);
                         sourceCodeAnalyser.analyse(metric);
                         metricRepository.save(metric);
                     } catch (Exception ex) {

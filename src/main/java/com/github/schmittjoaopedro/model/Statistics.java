@@ -6,6 +6,8 @@ import java.util.Map;
 
 public class Statistics implements Serializable {
 
+    private double statistic;
+
     private long linesNumber;
 
     private long notEmptyLinesNumber;
@@ -26,8 +28,22 @@ public class Statistics implements Serializable {
 
     private Map<String, Double> checkStyleClasses;
 
+    private int complexityHigh;
+
+    private int complexityLow;
+
+    private double complexityMean;
+
     public Statistics() {
         super();
+    }
+
+    public double getStatistic() {
+        return statistic;
+    }
+
+    public void setStatistic(double statistic) {
+        this.statistic = statistic;
     }
 
     public Map<String, Double> getPmdWeightedClasses() {
@@ -111,5 +127,29 @@ public class Statistics implements Serializable {
 
     public void setCheckStyleViolations(long checkStyleViolations) {
         this.checkStyleViolations = checkStyleViolations;
+    }
+
+    public int getComplexityHigh() {
+        return complexityHigh;
+    }
+
+    public void setComplexityHigh(int complexityHigh) {
+        this.complexityHigh = complexityHigh;
+    }
+
+    public int getComplexityLow() {
+        return complexityLow;
+    }
+
+    public void setComplexityLow(int complexityLow) {
+        this.complexityLow = complexityLow;
+    }
+
+    public double getComplexityMean() {
+        return complexityMean;
+    }
+
+    public void setComplexityMean(double complexityMean) {
+        this.complexityMean = complexityMean;
     }
 }

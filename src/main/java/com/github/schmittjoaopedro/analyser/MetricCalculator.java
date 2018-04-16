@@ -3,10 +3,7 @@ package com.github.schmittjoaopedro.analyser;
 import com.github.schmittjoaopedro.model.*;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -31,10 +28,23 @@ public final class MetricCalculator {
         statistics.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSourceCode().getSourceCode()));
 
         getMetricsCounts(metric, statistics);
-
         statistics.setEntropy(getEntropy(statistics));
 
+        getComplexityMetrics(metric, statistics);
+
         metric.setStatistics(statistics);
+    }
+
+    private static void getComplexityMetrics(Metric metric, Statistics statistics) {
+        if(!metric.getCyclomaticComplexities().isEmpty()) {
+            IntSummaryStatistics stats = metric.getCyclomaticComplexities()
+                    .stream()
+                    .mapToInt(x -> x.getCyclomatic())
+                    .summaryStatistics();
+            statistics.setComplexityHigh(stats.getMax());
+            statistics.setComplexityLow(stats.getMin());
+            statistics.setComplexityMean(stats.getAverage());
+        }
     }
 
     private static void getMetricsCounts(Metric metric, Statistics statistics) {

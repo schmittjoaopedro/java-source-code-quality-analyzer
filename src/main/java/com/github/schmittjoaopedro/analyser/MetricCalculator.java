@@ -44,6 +44,7 @@ public final class MetricCalculator {
             statistics.setComplexityHigh(stats.getMax());
             statistics.setComplexityLow(stats.getMin());
             statistics.setComplexityMean(stats.getAverage());
+            statistics.setStatistic(statistics.getEntropy() * statistics.getComplexityHigh());
         }
     }
 

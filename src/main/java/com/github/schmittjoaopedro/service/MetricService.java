@@ -86,7 +86,7 @@ public class MetricService {
                             item.getSourceCode().getUserUpdated(),
                             item.getSourceCode().getDateCreated(),
                             item.getSourceCode().getDateUpdated(),
-                            null))
+                            item.getStatistics().getStatistic()))
                 .collect(Collectors.toList());
     }
 

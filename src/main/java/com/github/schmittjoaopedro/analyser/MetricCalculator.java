@@ -72,14 +72,12 @@ public final class MetricCalculator {
                 statistics.getCheckStyleClasses().put(checkStyle.getName(), 1.0 + statistics.getCheckStyleClasses().get(checkStyle.getName()));
             }
         });
+        statistics.getPmdWeightedClasses().put("CheckStyle", statistics.getCheckStyleClasses().values().stream().mapToDouble(Double::doubleValue).sum());
     }
 
     private static double getEntropy(Statistics statistics) {
         final Map<String, Double> count = new HashMap<>();
         statistics.getPmdWeightedClasses().forEach((key, value) -> {
-            count.put(key, Math.log(value + .1));
-        });
-        statistics.getCheckStyleClasses().forEach((key, value) -> {
             count.put(key, Math.log(value + .1));
         });
         double total = count.values().stream().mapToDouble(Double::doubleValue).sum();

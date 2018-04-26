@@ -52,6 +52,7 @@ public class MetricService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void createIndex() {
+        metricRepository.deleteAll();
         List<Long> actionIds = oracleETL.getRuleActionsId();
         if (actionIds != null) {
             new Thread(() -> {

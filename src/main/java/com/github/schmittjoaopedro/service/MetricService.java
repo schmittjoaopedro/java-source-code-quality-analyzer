@@ -1,5 +1,6 @@
 package com.github.schmittjoaopedro.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
 
 import com.github.schmittjoaopedro.analyser.MetricCalculator;
 import com.github.schmittjoaopedro.dto.MetricHeader;
+import com.github.schmittjoaopedro.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.schmittjoaopedro.analyser.SourceCodeAnalyser;
 import com.github.schmittjoaopedro.database.MetricRepository;
 import com.github.schmittjoaopedro.database.OracleETL;
-import com.github.schmittjoaopedro.model.Metric;
-import com.github.schmittjoaopedro.model.SourceCode;
 
 @Service
 public class MetricService {
@@ -102,6 +102,9 @@ public class MetricService {
             double position = metricRepository.countByStatisticsStatisticGreaterThan(metric.getStatistics().getStatistic());
             double total = metricRepository.count();
             metric.getStatistics().setPosition(position / total);
+            metric.getPmdMetrics().stream().sorted(Comparator.comparing(PMDMetric::getPriority));
+            metric.getCyclomaticComplexities().stream().sorted(Comparator.comparing(CyclomaticComplexity::getCyclomatic));
+            metric.getCheckstyleMetrics().stream().sorted(Comparator.comparing(CheckstyleMetric::getSeverityLevel));
         }
         return metric;
     }

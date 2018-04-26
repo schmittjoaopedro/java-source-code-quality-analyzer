@@ -102,9 +102,9 @@ public class MetricService {
             double position = metricRepository.countByStatisticsStatisticGreaterThan(metric.getStatistics().getStatistic());
             double total = metricRepository.count();
             metric.getStatistics().setPosition(position / total);
-            metric.setPmdMetrics(metric.getPmdMetrics().stream().sorted(Comparator.comparing(PMDMetric::getPriority)).collect(Collectors.toList()));
-            metric.setCyclomaticComplexities(metric.getCyclomaticComplexities().stream().sorted(Comparator.comparing(CyclomaticComplexity::getCyclomatic)).collect(Collectors.toList()));
-            metric.setCheckstyleMetrics(metric.getCheckstyleMetrics().stream().sorted(Comparator.comparing(CheckstyleMetric::getSeverityLevel)).collect(Collectors.toList()));
+            metric.setPmdMetrics(metric.getPmdMetrics().stream().sorted(Comparator.comparing(PMDMetric::getPriority).reversed()).collect(Collectors.toList()));
+            metric.setCyclomaticComplexities(metric.getCyclomaticComplexities().stream().sorted(Comparator.comparing(CyclomaticComplexity::getCyclomatic).reversed()).collect(Collectors.toList()));
+            metric.setCheckstyleMetrics(metric.getCheckstyleMetrics().stream().sorted(Comparator.comparing(CheckstyleMetric::getSeverityLevel).reversed()).collect(Collectors.toList()));
         }
         return metric;
     }

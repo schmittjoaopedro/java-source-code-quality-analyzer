@@ -2,7 +2,6 @@ package com.github.schmittjoaopedro.webapp;
 
 import com.github.schmittjoaopedro.dto.MetricHeader;
 import com.github.schmittjoaopedro.model.Metric;
-import com.github.schmittjoaopedro.model.SourceCode;
 import com.github.schmittjoaopedro.service.MetricService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,27 +11,36 @@ import java.util.List;
 @RestController
 public class MetricController {
 
-	@Resource
-	private MetricService metricService;
-	
+    @Resource
+    private MetricService metricService;
+
     @RequestMapping(value = "/metrics", method = RequestMethod.POST)
     public Metric getMetrics(@RequestBody Metric metric) {
         return metricService.calculateMetric(metric);
     }
-    
+
     @RequestMapping(value = "/etl", method = RequestMethod.GET)
     public void startIndex() {
-    	metricService.createIndex();
+        metricService.createIndex();
     }
 
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
-    public @ResponseBody  List<MetricHeader> findRange(@RequestParam("page") Long page, @RequestParam("limit") Long limit) {
+    public @ResponseBody
+    List<MetricHeader> findRange(@RequestParam("page") Long page, @RequestParam("limit") Long limit) {
         return metricService.getMetricRange(page, limit);
     }
 
     @RequestMapping(value = "/metrics/{id}", method = RequestMethod.GET)
-    public @ResponseBody  Metric findRange(@PathVariable("id") String id) {
+    public @ResponseBody
+    Metric findRange(@PathVariable("id") String id) {
         return metricService.getMetric(id);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/statistic", method = RequestMethod.POST)
+    public @ResponseBody
+    Metric getStatistic(@RequestBody Metric metric) {
+        return metricService.getStatistic(metric);
     }
 
 }

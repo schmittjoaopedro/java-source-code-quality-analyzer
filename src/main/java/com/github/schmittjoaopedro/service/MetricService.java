@@ -95,4 +95,15 @@ public class MetricService {
         return metricRepository.findById(id).get();
     }
 
+    @Transactional
+    public Metric getStatistic(Metric metric) {
+        metric = calculateMetric(metric);
+        if(metric.getError() == null) {
+            double position = metricRepository.countByStatisticsStatisticGreaterThan(metric.getStatistics().getStatistic());
+            double total = metricRepository.count();
+            metric.getStatistics().setPosition(position / total);
+        }
+        return metric;
+    }
+
 }

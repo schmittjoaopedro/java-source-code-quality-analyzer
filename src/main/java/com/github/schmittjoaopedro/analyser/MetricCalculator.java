@@ -28,7 +28,8 @@ public final class MetricCalculator {
         statistics.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSourceCode().getSourceCode()));
 
         getMetricsCounts(metric, statistics);
-        statistics.setEntropy(getEntropy(statistics));
+        Double entropy = Math.max(1.0, getEntropy(statistics));
+        statistics.setEntropy(entropy);
 
         getComplexityMetrics(metric, statistics);
 

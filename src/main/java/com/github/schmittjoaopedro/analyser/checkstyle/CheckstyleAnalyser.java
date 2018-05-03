@@ -36,13 +36,13 @@ public class CheckstyleAnalyser {
             checker.destroy();
             return checkstyleListener.getCheckstyleMetrics();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             throw e;
         } finally {
             try {
                 FileUtils.forceDelete(new File(filePath.toString()));
             } catch (IOException e) {
-                logger.error(e);
+                logger.error(e.getMessage());
             }
         }
     }

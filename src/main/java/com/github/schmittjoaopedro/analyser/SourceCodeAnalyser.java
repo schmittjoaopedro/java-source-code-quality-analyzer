@@ -38,7 +38,7 @@ public class SourceCodeAnalyser {
                 }
                 MetricCalculator.calculate(metric);
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage());
                 logger.error("Error on load " + sourceCode.getRuleVersionId());
                 throw new RuntimeException(e);
             }
@@ -52,7 +52,7 @@ public class SourceCodeAnalyser {
             CyclomaticComplexityAnalyser cyclomaticComplexityAnalyser = new CyclomaticComplexityAnalyser();
             metric.setCyclomaticComplexities(cyclomaticComplexityAnalyser.analyse(sourceCode.getSourceCode()));
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nCyclomatic complexity error:" + e.getMessage());
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public class SourceCodeAnalyser {
             PMDAnalyser pmdAnalyser = new PMDAnalyser();
             metric.setPmdMetrics(pmdAnalyser.analyse(sourceCode.getSourceCode()));
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nPMD error:" + e.getMessage());
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public class SourceCodeAnalyser {
             CheckstyleAnalyser checkstyleAnalyser = new CheckstyleAnalyser();
             metric.setCheckstyleMetrics(checkstyleAnalyser.analyse(sourceCode.getSourceCode()));
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nCheckStyle error:" + e.getMessage());
             throw new RuntimeException(e);
         }

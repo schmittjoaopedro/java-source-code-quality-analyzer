@@ -54,7 +54,7 @@ public class PMDAnalyser {
                     }
                 });
             } catch (Exception e) {
-                logger.error(e);
+                logger.error(e.getMessage());
             }
         }
         return metrics;

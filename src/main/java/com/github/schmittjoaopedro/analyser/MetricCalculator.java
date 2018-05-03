@@ -45,7 +45,15 @@ public final class MetricCalculator {
             statistics.setComplexityHigh(stats.getMax());
             statistics.setComplexityLow(stats.getMin());
             statistics.setComplexityMean(stats.getAverage());
-            statistics.setStatistic(statistics.getEntropy() * statistics.getComplexityHigh());
+            statistics.setComplexityClass(4);
+            if(statistics.getComplexityHigh() <= 4) {
+                statistics.setComplexityClass(1);
+            } else if(statistics.getComplexityHigh() <= 7) {
+                statistics.setComplexityClass(2);
+            } else if(statistics.getComplexityHigh() <= 10) {
+                statistics.setComplexityClass(3);
+            }
+            statistics.setStatistic(statistics.getEntropy() * statistics.getComplexityClass());
         }
     }
 

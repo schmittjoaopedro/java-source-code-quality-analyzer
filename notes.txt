@@ -94,6 +94,45 @@ db.metric.count(
     }
 )
 
+db.metric.find().snapshot().forEach(
+    function (elem) {
+		var complexityClass = 4;
+		if(elem.statistics.complexityHigh <= 4) {
+			complexityClass = 1;
+		} else if (elem.statistics.complexityHigh <= 7) {
+			complexityClass = 2;
+		} else if (elem.statistics.complexityHigh <= 10) {
+			complexityClass = 3;
+		}
+        db.metric.update(
+            {
+                _id: elem._id
+            },
+            {
+                $set: {
+                    "statistics.complexityClass": complexityClass
+                }
+            }
+        );
+    }
+);
+
+db.metric.find().snapshot().forEach(
+    function (elem) {
+		var statistic = elem.statistics.complexityClass * elem.statistics.entropy;
+        db.metric.update(
+            {
+                _id: elem._id
+            },
+            {
+                $set: {
+                    "statistics.statistic": statistic
+                }
+            }
+        );
+    }
+);
+
 mongoexport.exe -h localhost -d app1 -c metric --type=csv --fields "sourceCode.ruleVersionId","sourceCode.dateCreated","sourceCode.userCreated","statistics.statistic","statistics.entropy","statistics.complexityHigh" -q '{}' --out report.csv
 
 mongoexport.exe -h localhost -d app1 -c metric --csv --fields "sourceCode.ruleVersionId' --out report.csv

@@ -34,6 +34,8 @@ public class Statistics implements Serializable {
 
     private double complexityMean;
 
+    private int complexityClass;
+
     private double position;
 
     public Statistics() {
@@ -161,5 +163,13 @@ public class Statistics implements Serializable {
 
     public void setPosition(double position) {
         this.position = position;
+    }
+
+    public int getComplexityClass() {
+        return complexityClass;
+    }
+
+    public void setComplexityClass(int complexityClass) {
+        this.complexityClass = complexityClass;
     }
 }

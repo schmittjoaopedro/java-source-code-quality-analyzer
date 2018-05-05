@@ -12,6 +12,7 @@ import com.github.schmittjoaopedro.dto.MetricHeader;
 import com.github.schmittjoaopedro.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class MetricService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
+    @Scheduled(cron = "0 0 22 * * ?", zone = "GMT-03:00")
     public void createIndex() {
         metricRepository.deleteAll();
         List<Long> actionIds = oracleETL.getRuleActionsId();
@@ -100,8 +102,8 @@ public class MetricService {
     public Metric getStatistic(Metric metric) {
         metric = calculateMetric(metric);
         if(metric.getError() == null) {
-            double position = metricRepository.countByStatisticsStatisticGreaterThan(metric.getStatistics().getStatistic());
-            double total = metricRepository.count();
+            double position = metricRepository.countByStatisticsStatisticGreaterThanAndStatisticsComplexityClass(metric.getStatistics().getStatistic(), metric.getStatistics().getComplexityClass());
+            double total = metricRepository.countByStatisticsComplexityClass(metric.getStatistics().getComplexityClass());
             metric.getStatistics().setPosition(position / total);
             metric.setPmdMetrics(metric.getPmdMetrics().stream().sorted(Comparator.comparing(PMDMetric::getPriority).reversed()).collect(Collectors.toList()));
             metric.setCyclomaticComplexities(metric.getCyclomaticComplexities().stream().sorted(Comparator.comparing(CyclomaticComplexity::getCyclomatic).reversed()).collect(Collectors.toList()));

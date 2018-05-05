@@ -8,4 +8,8 @@ public interface MetricRepository extends MongoRepository<Metric, String> {
 
     Long countByStatisticsStatisticGreaterThan(double statistic);
 
+    Long countByStatisticsStatisticGreaterThanAndStatisticsComplexityClass(double statistic, int complexityClass);
+
+    Long countByStatisticsComplexityClass(int complexityClass);
+
 }

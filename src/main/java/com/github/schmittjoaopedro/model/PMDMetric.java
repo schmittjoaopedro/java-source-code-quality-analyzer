@@ -27,6 +27,8 @@ public class PMDMetric implements Serializable {
 
     private int priority;
 
+    private String uriInfo;
+
     public PMDMetric() {
         super();
     }
@@ -101,5 +103,13 @@ public class PMDMetric implements Serializable {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getUriInfo() {
+        return uriInfo;
+    }
+
+    public void setUriInfo(String uriInfo) {
+        this.uriInfo = uriInfo;
     }
 }

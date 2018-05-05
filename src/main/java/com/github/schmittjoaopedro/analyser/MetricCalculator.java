@@ -54,6 +54,14 @@ public final class MetricCalculator {
                 statistics.setComplexityClass(3);
             }
             statistics.setStatistic(statistics.getEntropy() * statistics.getComplexityClass());
+
+            DoubleSummaryStatistics statsWeighted = statistics.getPmdWeightedClasses().values()
+                    .stream()
+                    .mapToDouble(x -> x)
+                    .summaryStatistics();
+            statistics.setNumberOfViolations(statistics.getPmdWeightedClasses().keySet().size());
+            statistics.setViolationsWeightedTotal(statsWeighted.getSum());
+            statistics.setViolationsWeightedMean(statsWeighted.getAverage());
         }
     }
 

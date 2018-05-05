@@ -38,6 +38,12 @@ public class Statistics implements Serializable {
 
     private double position;
 
+    private int numberOfViolations;
+
+    private double violationsWeightedTotal;
+
+    private double violationsWeightedMean;
+
     public Statistics() {
         super();
     }
@@ -171,5 +177,29 @@ public class Statistics implements Serializable {
 
     public void setComplexityClass(int complexityClass) {
         this.complexityClass = complexityClass;
+    }
+
+    public int getNumberOfViolations() {
+        return numberOfViolations;
+    }
+
+    public void setNumberOfViolations(int numberOfViolations) {
+        this.numberOfViolations = numberOfViolations;
+    }
+
+    public double getViolationsWeightedTotal() {
+        return violationsWeightedTotal;
+    }
+
+    public void setViolationsWeightedTotal(double violationsWeightedTotal) {
+        this.violationsWeightedTotal = violationsWeightedTotal;
+    }
+
+    public double getViolationsWeightedMean() {
+        return violationsWeightedMean;
+    }
+
+    public void setViolationsWeightedMean(double violationsWeightedMean) {
+        this.violationsWeightedMean = violationsWeightedMean;
     }
 }

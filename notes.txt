@@ -133,8 +133,6 @@ db.metric.find().snapshot().forEach(
     }
 );
 
-mongoexport.exe -h localhost -d app1 -c metric --type=csv --fields "sourceCode.ruleVersionId","sourceCode.dateCreated","sourceCode.userCreated","statistics.statistic","statistics.entropy","statistics.complexityHigh" -q '{}' --out report.csv
-
-mongoexport.exe -h localhost -d app1 -c metric --csv --fields "sourceCode.ruleVersionId' --out report.csv
-
 mongoexport.exe -h localhost -d app1 -c metric --type=csv --fields "sourceCode.ruleVersionId,sourceCode.dateCreated,sourceCode.userCreated,statistics.statistic,statistics.entropy,statistics.complexityHigh" --out report.csv
+
+mongoexport.exe -h localhost -d app1 -c metric --type=csv --fields "sourceCode.ruleVersionId,sourceCode.dateCreated,sourceCode.userCreated,statistics.statistic,statistics.entropy,statistics.complexityHigh,statistics.complexityClass,statistics.normalizedLinesNumber,statistics.pmdViolations,statistics.numberOfViolations,statistics.violationsWeightedTotal,statistics.violationsWeightedMean" --out report.csv

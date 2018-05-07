@@ -49,7 +49,7 @@ public class PMDAnalyser {
                         pmdMetric.setRule(violation.getRule().getDescription());
                         pmdMetric.setMessage(violation.getRule().getMessage());
                         pmdMetric.setName(violation.getRule().getName());
-                        pmdMetric.setPriority(violation.getRule().getPriority().getPriority());
+                        pmdMetric.setPriority(RulePriority.LOW.getPriority() - violation.getRule().getPriority().getPriority() + 1);
                         pmdMetric.setUriInfo(violation.getRule().getExternalInfoUrl());
                         metrics.add(pmdMetric);
                     }

@@ -2,12 +2,10 @@ package com.github.schmittjoaopedro.service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import com.github.schmittjoaopedro.analyser.MetricCalculator;
 import com.github.schmittjoaopedro.dto.MetricHeader;
 import com.github.schmittjoaopedro.model.*;
 import org.apache.logging.log4j.LogManager;
@@ -55,12 +53,40 @@ public class MetricService {
     @Scheduled(cron = "0 0 22 * * ?", zone = "GMT-03:00")
     public void createIndex() {
         metricRepository.deleteAll();
+        importRuleDependencies();
+        importRuleActions();
+    }
+
+    private void importRuleActions() {
         List<Long> actionIds = oracleETL.getRuleActionsId();
         if (actionIds != null) {
             new Thread(() -> {
                 for (Long id : actionIds) {
                     try {
-                        Metric metric = oracleETL.getMetric(id);
+                        Metric metric = oracleETL.getJavaActionMetric(id);
+                        metric.getSourceCode().setCodeType(CodeType.Action);
+                        metric.setPmd(true);
+                        metric.setCheckStyle(true);
+                        metric.setCyclomaticComplexity(true);
+                        sourceCodeAnalyser.analyse(metric);
+                        metricRepository.save(metric);
+                    } catch (Exception ex) {
+                        logger.error(ex);
+                        logger.error("Error on load " + id);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void importRuleDependencies() {
+        List<Long> dependenciesId = oracleETL.getRuleDependenciesId();
+        if (dependenciesId != null) {
+            new Thread(() -> {
+                for (Long id : dependenciesId) {
+                    try {
+                        Metric metric = oracleETL.getJavaDependencyMetric(id);
+                        metric.getSourceCode().setCodeType(CodeType.Dependency);
                         metric.setPmd(true);
                         metric.setCheckStyle(true);
                         metric.setCyclomaticComplexity(true);

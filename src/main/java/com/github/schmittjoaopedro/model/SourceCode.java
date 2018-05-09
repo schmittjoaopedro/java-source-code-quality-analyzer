@@ -30,6 +30,10 @@ public class SourceCode implements Serializable {
 
     private String sourceCode;
 
+    private int status;
+
+    private CodeType codeType;
+
     public SourceCode() {
         super();
     }
@@ -114,4 +118,19 @@ public class SourceCode implements Serializable {
         this.sourceCode = sourceCode;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public CodeType getCodeType() {
+        return codeType;
+    }
+
+    public void setCodeType(CodeType codeType) {
+        this.codeType = codeType;
+    }
 }

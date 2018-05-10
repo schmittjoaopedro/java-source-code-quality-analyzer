@@ -95,11 +95,11 @@ public class OracleETL {
     }
 
     public List<Long> getRuleDependenciesId() {
-        return getActionId("RULE_DEPENDENCY", false);
+        return getActionId("RULE_DEPENDENCY", true);
     }
 
     public List<Long> getRuleActionsId() {
-        return getActionId("RULE_ACTION", false);
+        return getActionId("RULE_ACTION", true);
     }
 
     private List<Long> getActionId(String tableName, boolean onlyReleased) {

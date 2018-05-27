@@ -42,3 +42,67 @@ temp$prop = temp$compHigh / sum(temp$compHigh)
 
 temp <- data.frame(pmdCount = data$pmdViol, pmdType = data$pmdViolTypes, compClass = data$compClass, compHigh = data$compHigh)
 cor(temp)
+
+# ALL RULES
+data2 <- read.csv("report2.csv", sep = ";", colClasses = c("integer","integer","Date","factor","factor","numeric","numeric","integer","integer","integer","integer","integer","integer","numeric"))
+
+head(data2)
+dim(data2)
+names(data2)
+
+# Acumulado - Entropia x ano/mes
+entropyMY <- data2 %>% 
+    mutate(monthYear = format(dateCreated, "%Y-%m")) %>%
+    group_by(monthYear) %>%
+    summarise(total = mean(entropy), sd = sd(entropy)) %>% 
+    as.data.frame()
+gg <- ggplot(entropyMY, aes(x = monthYear, y = total))
+gg <- gg + geom_point()
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+
+# Usuário x entropia
+entropyMY <- data2 %>% 
+    filter(userCreated == "felipevegini") %>%
+    group_by(dateCreated) %>%
+    summarise(total = mean(entropy)) %>% 
+    as.data.frame()
+gg <- ggplot(entropyMY, aes(x = dateCreated, y = total))
+gg <- gg + geom_point()
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+
+# Média mensal
+entropyMY <- data2 %>% 
+    filter(format(dateCreated, "%m") %in% c("03","04","05")) %>%
+    mutate(monthYear = format(dateCreated, "%Y-%m")) %>%
+    group_by(monthYear) %>%
+    summarise(media = mean(entropy)) %>% 
+    as.data.frame()
+gg <- ggplot(entropyMY, aes(x = monthYear, y = media))
+gg <- gg + geom_point()
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+
+# Contagem de regras 
+entropyMY <- data2 %>% 
+    filter(format(dateCreated, "%m") %in% c("03","04","05")) %>%
+    mutate(monthYear = format(dateCreated, "%Y-%m")) %>%
+    group_by(monthYear) %>%
+    summarise(count = n()) %>% 
+    as.data.frame()
+gg <- ggplot(entropyMY, aes(x = monthYear, y = count))
+gg <- gg + geom_point()
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg
+
+# Número de violações
+entropyMY <- data2 %>% 
+    mutate(monthYear = format(dateCreated, "%Y-%m")) %>%
+    group_by(monthYear) %>%
+    summarise(total = sum(pmdViolations)) %>% 
+    as.data.frame()
+gg <- ggplot(entropyMY, aes(x = monthYear, y = total))
+gg <- gg + geom_point()
+gg <- gg + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+gg

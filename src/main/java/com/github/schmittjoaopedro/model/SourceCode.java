@@ -1,65 +1,48 @@
 package com.github.schmittjoaopedro.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Date;
 
+@Entity
 public class SourceCode implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-    private Long ruleId;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    private Long ruleVersionId;
-
-    private Long ruleActionId;
+    private Long name;
 
     private String description;
 
     private String userCreated;
 
-    private String userUpdated;
-
     private Date dateCreated;
-
-    private Date dateUpdated;
 
     private String className;
 
-    private String sourceCode;
-
-    private int status;
-
-    private CodeType codeType;
+    @Lob
+    private byte[] sourceCode;
 
     public SourceCode() {
         super();
     }
 
-    public Long getRuleId() {
-        return ruleId;
+    public Long getId() {
+        return id;
     }
 
-    public void setRuleId(Long ruleId) {
-        this.ruleId = ruleId;
-    }
-
-    public Long getRuleVersionId() {
-        return ruleVersionId;
-    }
-
-    public void setRuleVersionId(Long ruleVersionId) {
-        this.ruleVersionId = ruleVersionId;
-    }
-
-    public Long getRuleActionId() {
-        return ruleActionId;
-    }
-
-    public void setRuleActionId(Long ruleActionId) {
-        this.ruleActionId = ruleActionId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -78,28 +61,12 @@ public class SourceCode implements Serializable {
         this.userCreated = userCreated;
     }
 
-    public String getUserUpdated() {
-        return userUpdated;
-    }
-
-    public void setUserUpdated(String userUpdated) {
-        this.userUpdated = userUpdated;
-    }
-
     public Date getDateCreated() {
         return dateCreated;
     }
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public Date getDateUpdated() {
-        return dateUpdated;
-    }
-
-    public void setDateUpdated(Date dateUpdated) {
-        this.dateUpdated = dateUpdated;
     }
 
     public String getClassName() {
@@ -111,26 +78,11 @@ public class SourceCode implements Serializable {
     }
 
     public String getSourceCode() {
-        return sourceCode;
+        return new String(sourceCode, Charset.forName("UTF-8"));
     }
 
     public void setSourceCode(String sourceCode) {
-        this.sourceCode = sourceCode;
+        this.sourceCode = sourceCode.getBytes(Charset.forName("UTF-8"));
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public CodeType getCodeType() {
-        return codeType;
-    }
-
-    public void setCodeType(CodeType codeType) {
-        this.codeType = codeType;
-    }
 }

@@ -1,10 +1,21 @@
 package com.github.schmittjoaopedro.model;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Entity
 public class Statistics implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     private double statistic;
 
@@ -22,11 +33,20 @@ public class Statistics implements Serializable {
 
     private long checkStyleViolations;
 
-    private Map<String, Double> pmdClasses;
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "PMD_CLASSES_ID")
+    private List<PmdClasses> pmdClasses;
 
-    private Map<String, Double> pmdWeightedClasses;
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "PMD_WEIGHT_CLASSES_ID")
+    private List<PmdWeightedClasses> pmdWeightedClasses;
 
-    private Map<String, Double> checkStyleClasses;
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "CHECKSTYLE_CLASSES_ID")
+    private List<CheckStyleClasses> checkStyleClasses;
 
     private int complexityHigh;
 
@@ -48,6 +68,14 @@ public class Statistics implements Serializable {
         super();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public double getStatistic() {
         return statistic;
     }
@@ -56,31 +84,31 @@ public class Statistics implements Serializable {
         this.statistic = statistic;
     }
 
-    public Map<String, Double> getPmdWeightedClasses() {
-        if(pmdWeightedClasses == null) pmdWeightedClasses = new HashMap<>();
+    public List<PmdWeightedClasses> getPmdWeightedClasses() {
+        if (pmdWeightedClasses == null) pmdWeightedClasses = new ArrayList<>();
         return pmdWeightedClasses;
     }
 
-    public void setPmdWeightedClasses(Map<String, Double> pmdWeightedClasses) {
-        this.pmdWeightedClasses = pmdWeightedClasses;
+    public Map<String, Double> getPmdWeightedClassesAsMap() {
+        return getPmdWeightedClasses().stream().collect(Collectors.toMap(PmdWeightedClasses::getName, PmdWeightedClasses::getCount));
     }
 
-    public Map<String, Double> getPmdClasses() {
-        if(pmdClasses == null) pmdClasses = new HashMap<>();
+    public List<PmdClasses> getPmdClasses() {
+        if (pmdClasses == null) pmdClasses = new ArrayList<>();
         return pmdClasses;
     }
 
-    public void setPmdClasses(Map<String, Double> pmdClasses) {
-        this.pmdClasses = pmdClasses;
+    public Map<String, Double> getPmdClassesAsMap() {
+        return getPmdClasses().stream().collect(Collectors.toMap(PmdClasses::getName, PmdClasses::getCount));
     }
 
-    public Map<String, Double> getCheckStyleClasses() {
-        if(checkStyleClasses == null) checkStyleClasses = new HashMap<>();
+    public List<CheckStyleClasses> getCheckStyleClasses() {
+        if (checkStyleClasses == null) checkStyleClasses = new ArrayList<>();
         return checkStyleClasses;
     }
 
-    public void setCheckStyleClasses(Map<String, Double> checkStyleClasses) {
-        this.checkStyleClasses = checkStyleClasses;
+    public Map<String, Double> getCheckStyleClassesAsMap() {
+        return getCheckStyleClasses().stream().collect(Collectors.toMap(CheckStyleClasses::getName, CheckStyleClasses::getCount));
     }
 
     public long getLinesNumber() {

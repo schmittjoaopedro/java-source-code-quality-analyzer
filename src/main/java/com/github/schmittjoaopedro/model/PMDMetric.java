@@ -1,7 +1,13 @@
 package com.github.schmittjoaopedro.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
+@Entity
 public class PMDMetric implements Serializable {
 
     /**
@@ -11,26 +17,42 @@ public class PMDMetric implements Serializable {
 
 	private String name;
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
 	private int beginLine;
 
     private int endLine;
 
-    private String description;
+    @Lob
+    private byte[] description;
 
     private int beginColumn;
 
     private int endColumn;
 
-    private String rule;
+    @Lob
+    private byte[] rule;
 
-    private String message;
+    @Lob
+    private byte[] message;
 
     private int priority;
 
-    private String uriInfo;
+    @Lob
+    private byte[] uriInfo;
 
     public PMDMetric() {
         super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,11 +80,11 @@ public class PMDMetric implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return new String(description, Charset.forName("UTF-8"));
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.getBytes(Charset.forName("UTF-8"));
     }
 
     public int getBeginColumn() {
@@ -82,19 +104,19 @@ public class PMDMetric implements Serializable {
     }
 
     public String getRule() {
-        return rule;
+        return new String(rule, Charset.forName("UTF-8"));
     }
 
     public void setRule(String rule) {
-        this.rule = rule;
+        this.rule = rule.getBytes(Charset.forName("UTF-8"));
     }
 
     public String getMessage() {
-        return message;
+        return new String(message, Charset.forName("UTF-8"));
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.message = message.getBytes(Charset.forName("UTF-8"));
     }
 
     public int getPriority() {
@@ -106,10 +128,10 @@ public class PMDMetric implements Serializable {
     }
 
     public String getUriInfo() {
-        return uriInfo;
+        return new String(uriInfo, Charset.forName("UTF-8"));
     }
 
     public void setUriInfo(String uriInfo) {
-        this.uriInfo = uriInfo;
+        this.uriInfo = uriInfo.getBytes(Charset.forName("UTF-8"));
     }
 }

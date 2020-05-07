@@ -1,13 +1,15 @@
 package com.github.schmittjoaopedro.analyser;
 
-import com.github.schmittjoaopedro.model.*;
+import com.github.schmittjoaopedro.model.Metric;
+import com.github.schmittjoaopedro.model.PmdClasses;
+import com.github.schmittjoaopedro.model.PmdWeightedClasses;
+import com.github.schmittjoaopedro.model.Statistics;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class MetricCalculator {
 
@@ -22,10 +24,10 @@ public final class MetricCalculator {
     public static void calculate(Metric metric) {
         Statistics statistics = new Statistics();
 
-        statistics.setLinesNumber(getLinesNumber(metric.getSourceCode().getSourceCode()));
-        statistics.setNormalizedLinesNumber(getNormalizedLinesNumber(metric.getSourceCode().getSourceCode()));
-        statistics.setUncommentedLinesNumber(getUncommentedLinesNumber(metric.getSourceCode().getSourceCode()));
-        statistics.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSourceCode().getSourceCode()));
+        statistics.setLinesNumber(getLinesNumber(metric.getSource()));
+        statistics.setNormalizedLinesNumber(getNormalizedLinesNumber(metric.getSource()));
+        statistics.setUncommentedLinesNumber(getUncommentedLinesNumber(metric.getSource()));
+        statistics.setNotEmptyLinesNumber(getNotEmptyLinesNumber(metric.getSource()));
 
         getMetricsCounts(metric, statistics);
         Double entropy = Math.max(1.0, getEntropy(statistics));
@@ -37,7 +39,7 @@ public final class MetricCalculator {
     }
 
     private static void getComplexityMetrics(Metric metric, Statistics statistics) {
-        if(!metric.getCyclomaticComplexities().isEmpty()) {
+        if (!metric.getCyclomaticComplexities().isEmpty()) {
             IntSummaryStatistics stats = metric.getCyclomaticComplexities()
                     .stream()
                     .mapToInt(x -> x.getCyclomatic())
@@ -46,20 +48,21 @@ public final class MetricCalculator {
             statistics.setComplexityLow(stats.getMin());
             statistics.setComplexityMean(stats.getAverage());
             statistics.setComplexityClass(4);
-            if(statistics.getComplexityHigh() <= 4) {
+            if (statistics.getComplexityHigh() <= 4) {
                 statistics.setComplexityClass(1);
-            } else if(statistics.getComplexityHigh() <= 7) {
+            } else if (statistics.getComplexityHigh() <= 7) {
                 statistics.setComplexityClass(2);
-            } else if(statistics.getComplexityHigh() <= 10) {
+            } else if (statistics.getComplexityHigh() <= 10) {
                 statistics.setComplexityClass(3);
             }
             statistics.setStatistic(statistics.getEntropy() * statistics.getComplexityClass());
 
-            DoubleSummaryStatistics statsWeighted = statistics.getPmdWeightedClasses().values()
+            Map<String, Double> pmdWeightedMap = statistics.getPmdWeightedClassesAsMap();
+            DoubleSummaryStatistics statsWeighted = pmdWeightedMap.values()
                     .stream()
                     .mapToDouble(x -> x)
                     .summaryStatistics();
-            statistics.setNumberOfViolations(statistics.getPmdWeightedClasses().keySet().size());
+            statistics.setNumberOfViolations(pmdWeightedMap.keySet().size());
             statistics.setViolationsWeightedTotal(statsWeighted.getSum());
             statistics.setViolationsWeightedMean(statsWeighted.getAverage());
         }
@@ -68,39 +71,47 @@ public final class MetricCalculator {
     private static void getMetricsCounts(Metric metric, Statistics statistics) {
         statistics.setPmdViolations(metric.getPmdMetrics().size());
         statistics.setCheckStyleViolations(metric.getCheckstyleMetrics().size());
+        // PMD Classes
+        Map<String, Double> pmdClasses = new HashMap<>();
         metric.getPmdMetrics().forEach(pmd -> {
-            if(!statistics.getPmdClasses().containsKey(pmd.getName())) {
-                statistics.getPmdClasses().put(pmd.getName(), 1.0);
+            if (!pmdClasses.containsKey(pmd.getName())) {
+                pmdClasses.put(pmd.getName(), 1.0);
             } else {
-                statistics.getPmdClasses().put(pmd.getName(), 1.0 + statistics.getPmdClasses().get(pmd.getName()));
+                pmdClasses.put(pmd.getName(), 1.0 + pmdClasses.get(pmd.getName()));
             }
         });
+        pmdClasses.forEach((key, value) -> statistics.getPmdClasses().add(new PmdClasses(key, value)));
+
+        // Weighted Classes
+        Map<String, Double> pmdWeightedClasses = new HashMap<>();
         metric.getPmdMetrics().forEach(pmd -> {
-            if(!statistics.getPmdWeightedClasses().containsKey(pmd.getName())) {
-                statistics.getPmdWeightedClasses().put(pmd.getName(), (double) pmd.getPriority());
+            if (!pmdWeightedClasses.containsKey(pmd.getName())) {
+                pmdWeightedClasses.put(pmd.getName(), (double) pmd.getPriority());
             } else {
-                statistics.getPmdWeightedClasses().put(pmd.getName(), pmd.getPriority() + statistics.getPmdWeightedClasses().get(pmd.getName()));
+                pmdWeightedClasses.put(pmd.getName(), pmd.getPriority() + pmdWeightedClasses.get(pmd.getName()));
             }
         });
+        Map<String, Double> checkStyleClasses = new HashMap<>();
         metric.getCheckstyleMetrics().forEach(checkStyle -> {
-            if(!statistics.getCheckStyleClasses().containsKey(checkStyle.getName())) {
-                statistics.getCheckStyleClasses().put(checkStyle.getName(), 1.0);
+            if (!checkStyleClasses.containsKey(checkStyle.getName())) {
+                checkStyleClasses.put(checkStyle.getName(), 1.0);
             } else {
-                statistics.getCheckStyleClasses().put(checkStyle.getName(), 1.0 + statistics.getCheckStyleClasses().get(checkStyle.getName()));
+                checkStyleClasses.put(checkStyle.getName(), 1.0 + checkStyleClasses.get(checkStyle.getName()));
             }
         });
-        statistics.getPmdWeightedClasses().put("CheckStyle", statistics.getCheckStyleClasses().values().stream().mapToDouble(Double::doubleValue).sum());
+        pmdWeightedClasses.put("CheckStyle", checkStyleClasses.values().stream().mapToDouble(Double::doubleValue).sum());
+        pmdWeightedClasses.forEach((key, value) -> statistics.getPmdWeightedClasses().add(new PmdWeightedClasses(key, value)));
     }
 
     private static double getEntropy(Statistics statistics) {
         final Map<String, Double> count = new HashMap<>();
-        statistics.getPmdWeightedClasses().forEach((key, value) -> {
+        statistics.getPmdWeightedClassesAsMap().forEach((key, value) -> {
             count.put(key, Math.log(value + .1));
         });
         double total = count.values().stream().mapToDouble(Double::doubleValue).sum();
         List<Double> probabilities = count.values().stream().map(item -> item / total).collect(Collectors.toList());
         double entropy = 0.0;
-        for(double probability : probabilities) {
+        for (double probability : probabilities) {
             entropy += probability * (Math.log10(probability) / Math.log10(2));
         }
         return entropy * -1.0;
@@ -131,10 +142,12 @@ public final class MetricCalculator {
         while (m.find()) {
             className = m.group(0);
             className = className.replace(CLASS, "").replace(BRACKET, "");
-            if(className.contains(PUBLIC)) className = className.replace(PUBLIC, "");
-            if(className.contains(PRIVATE)) className = className.replace(PRIVATE, "");
-            if(className.contains(EXTENDS)) className = className.replace(className.substring(className.indexOf(EXTENDS)), "");
-            if(className.contains(IMPLEMENTS)) className = className.replace(className.substring(className.indexOf(IMPLEMENTS)), "");
+            if (className.contains(PUBLIC)) className = className.replace(PUBLIC, "");
+            if (className.contains(PRIVATE)) className = className.replace(PRIVATE, "");
+            if (className.contains(EXTENDS))
+                className = className.replace(className.substring(className.indexOf(EXTENDS)), "");
+            if (className.contains(IMPLEMENTS))
+                className = className.replace(className.substring(className.indexOf(IMPLEMENTS)), "");
             className = className.trim();
             break;
         }

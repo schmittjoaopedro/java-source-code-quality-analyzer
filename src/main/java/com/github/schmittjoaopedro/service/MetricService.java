@@ -1,11 +1,8 @@
 package com.github.schmittjoaopedro.service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
+import com.github.schmittjoaopedro.analyser.SourceCodeAnalyser;
+import com.github.schmittjoaopedro.database.MetricRepository;
+import com.github.schmittjoaopedro.database.SourceCodeLoader;
 import com.github.schmittjoaopedro.dto.MetricHeader;
 import com.github.schmittjoaopedro.model.*;
 import org.apache.logging.log4j.LogManager;
@@ -15,9 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.schmittjoaopedro.analyser.SourceCodeAnalyser;
-import com.github.schmittjoaopedro.database.MetricRepository;
-import com.github.schmittjoaopedro.database.OracleETL;
+import javax.annotation.Resource;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MetricService {
@@ -31,7 +29,7 @@ public class MetricService {
     private SourceCodeAnalyser sourceCodeAnalyser;
 
     @Resource
-    private OracleETL oracleETL;
+    private SourceCodeLoader sourceCodeLoader;
 
     public Metric calculateMetric(Metric metric) {
         try {
@@ -53,52 +51,24 @@ public class MetricService {
     @Scheduled(cron = "0 0 22 * * ?", zone = "GMT-03:00")
     public void createIndex() {
         metricRepository.deleteAll();
-        importRuleDependencies();
-        importRuleActions();
+        importSourceCodes();
     }
 
-    private void importRuleActions() {
-        List<Long> actionIds = oracleETL.getRuleActionsId();
-        if (actionIds != null) {
-            new Thread(() -> {
-                for (Long id : actionIds) {
-                    try {
-                        Metric metric = oracleETL.getJavaActionMetric(id);
-                        metric.getSourceCode().setCodeType(CodeType.Action);
-                        metric.setPmd(true);
-                        metric.setCheckStyle(true);
-                        metric.setCyclomaticComplexity(true);
-                        sourceCodeAnalyser.analyse(metric);
-                        metricRepository.save(metric);
-                    } catch (Exception ex) {
-                        logger.error(ex);
-                        logger.error("Error on load " + id);
-                    }
+    private void importSourceCodes() {
+        new Thread(() -> {
+            for (Metric metric : sourceCodeLoader.getMetrics()) {
+                try {
+                    metric.setPmd(true);
+                    metric.setCheckStyle(true);
+                    metric.setCyclomaticComplexity(true);
+                    sourceCodeAnalyser.analyse(metric);
+                    metricRepository.save(metric);
+                } catch (Exception ex) {
+                    logger.error(ex);
+                    logger.error("Error on load " + metric.getName());
                 }
-            }).start();
-        }
-    }
-
-    private void importRuleDependencies() {
-        List<Long> dependenciesId = oracleETL.getRuleDependenciesId();
-        if (dependenciesId != null) {
-            new Thread(() -> {
-                for (Long id : dependenciesId) {
-                    try {
-                        Metric metric = oracleETL.getJavaDependencyMetric(id);
-                        metric.getSourceCode().setCodeType(CodeType.Dependency);
-                        metric.setPmd(true);
-                        metric.setCheckStyle(true);
-                        metric.setCyclomaticComplexity(true);
-                        sourceCodeAnalyser.analyse(metric);
-                        metricRepository.save(metric);
-                    } catch (Exception ex) {
-                        logger.error(ex);
-                        logger.error("Error on load " + id);
-                    }
-                }
-            }).start();
-        }
+            }
+        }).start();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -108,14 +78,11 @@ public class MetricService {
                 .getContent()
                 .stream()
                 .map(item ->
-                    new MetricHeader(
-                            item.getId(),
-                            item.getSourceCode().getRuleVersionId(),
-                            item.getSourceCode().getUserCreated(),
-                            item.getSourceCode().getUserUpdated(),
-                            item.getSourceCode().getDateCreated(),
-                            item.getSourceCode().getDateUpdated(),
-                            item.getStatistics().getStatistic()))
+                        new MetricHeader(
+                                item.getSourceCode().getClassName(),
+                                item.getSourceCode().getUserCreated(),
+                                item.getSourceCode().getDateCreated(),
+                                item.getStatistics().getStatistic()))
                 .collect(Collectors.toList());
     }
 
@@ -127,7 +94,7 @@ public class MetricService {
     @Transactional
     public Metric getStatistic(Metric metric) {
         metric = calculateMetric(metric);
-        if(metric.getError() == null) {
+        if (metric.getError() == null) {
             double position = metricRepository.countByStatisticsStatisticGreaterThanAndStatisticsComplexityClass(metric.getStatistics().getStatistic(), metric.getStatistics().getComplexityClass());
             double total = metricRepository.countByStatisticsComplexityClass(metric.getStatistics().getComplexityClass());
             metric.getStatistics().setPosition(position / total);

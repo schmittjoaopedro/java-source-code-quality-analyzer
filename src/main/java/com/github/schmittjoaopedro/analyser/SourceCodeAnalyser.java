@@ -24,9 +24,9 @@ public class SourceCodeAnalyser {
 
     public void analyse(Metric metric) {
         SourceCode sourceCode = metric.getSourceCode();
-        if (sourceCode != null && !StringUtils.isBlank(sourceCode.getSourceCode())) {
+        if (sourceCode != null && !StringUtils.isBlank(metric.getSource())) {
             try {
-                sourceCode.setClassName(MetricCalculator.extractClassNameFromSourceCode(sourceCode.getSourceCode()));
+                sourceCode.setClassName(MetricCalculator.extractClassNameFromSourceCode(metric.getSource()));
                 if (metric.isCheckStyle()) {
                     checkStyle(metric, sourceCode);
                 }
@@ -39,7 +39,7 @@ public class SourceCodeAnalyser {
                 MetricCalculator.calculate(metric);
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                logger.error("Error on load " + sourceCode.getRuleVersionId());
+                logger.error("Error on load " + sourceCode.getClassName());
                 throw new RuntimeException(e);
             }
         } else {
@@ -50,7 +50,7 @@ public class SourceCodeAnalyser {
     private void cyclomaticComplexity(Metric metric, SourceCode sourceCode) {
         try {
             CyclomaticComplexityAnalyser cyclomaticComplexityAnalyser = new CyclomaticComplexityAnalyser();
-            metric.setCyclomaticComplexities(cyclomaticComplexityAnalyser.analyse(sourceCode.getSourceCode()));
+            metric.setCyclomaticComplexities(cyclomaticComplexityAnalyser.analyse(metric.getSource()));
         } catch (Exception e) {
             logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nCyclomatic complexity error:" + e.getMessage());
@@ -61,7 +61,7 @@ public class SourceCodeAnalyser {
     private void checkPmd(Metric metric, SourceCode sourceCode) {
         try {
             PMDAnalyser pmdAnalyser = new PMDAnalyser();
-            metric.setPmdMetrics(pmdAnalyser.analyse(sourceCode.getSourceCode()));
+            metric.setPmdMetrics(pmdAnalyser.analyse(metric.getSource()));
         } catch (Exception e) {
             logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nPMD error:" + e.getMessage());
@@ -72,7 +72,7 @@ public class SourceCodeAnalyser {
     private void checkStyle(Metric metric, SourceCode sourceCode) {
         try {
             CheckstyleAnalyser checkstyleAnalyser = new CheckstyleAnalyser();
-            metric.setCheckstyleMetrics(checkstyleAnalyser.analyse(sourceCode.getSourceCode()));
+            metric.setCheckstyleMetrics(checkstyleAnalyser.analyse(metric.getSource()));
         } catch (Exception e) {
             logger.error(e.getMessage());
             metric.setError(metric.getError() + "\nCheckStyle error:" + e.getMessage());

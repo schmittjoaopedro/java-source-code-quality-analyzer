@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;

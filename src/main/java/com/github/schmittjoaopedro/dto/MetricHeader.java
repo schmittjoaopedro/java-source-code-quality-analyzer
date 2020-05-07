@@ -4,17 +4,11 @@ import java.util.Date;
 
 public class MetricHeader {
 
-    private String id;
-
-    private Long ruleVersionId;
+    private String name;
 
     private String userCreated;
 
-    private String userUpdated;
-
     private Date dateCreated;
-
-    private Date dateUpdated;
 
     private Double classComplexity;
 
@@ -22,31 +16,19 @@ public class MetricHeader {
         super();
     }
 
-    public MetricHeader(String id, Long ruleVersionId, String userCreated, String userUpdated, Date dateCreated, Date dateUpdated, Double classComplexity) {
-        super();
-        this.id = id;
-        this.ruleVersionId = ruleVersionId;
+    public MetricHeader(String name, String userCreated, Date dateCreated, Double classComplexity) {
+        this.name = name;
         this.userCreated = userCreated;
-        this.userUpdated = userUpdated;
         this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
         this.classComplexity = classComplexity;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getRuleVersionId() {
-        return ruleVersionId;
-    }
-
-    public void setRuleVersionId(Long ruleVersionId) {
-        this.ruleVersionId = ruleVersionId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUserCreated() {
@@ -57,28 +39,12 @@ public class MetricHeader {
         this.userCreated = userCreated;
     }
 
-    public String getUserUpdated() {
-        return userUpdated;
-    }
-
-    public void setUserUpdated(String userUpdated) {
-        this.userUpdated = userUpdated;
-    }
-
     public Date getDateCreated() {
         return dateCreated;
     }
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public Date getDateUpdated() {
-        return dateUpdated;
-    }
-
-    public void setDateUpdated(Date dateUpdated) {
-        this.dateUpdated = dateUpdated;
     }
 
     public Double getClassComplexity() {

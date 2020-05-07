@@ -1,10 +1,9 @@
 package com.github.schmittjoaopedro.database;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import com.github.schmittjoaopedro.model.Metric;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MetricRepository extends MongoRepository<Metric, String> {
+public interface MetricRepository extends JpaRepository<Metric, String> {
 
     Long countByStatisticsStatisticGreaterThan(double statistic);
 

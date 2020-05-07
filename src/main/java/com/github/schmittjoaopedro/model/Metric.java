@@ -1,12 +1,16 @@
 package com.github.schmittjoaopedro.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Metric implements Serializable {
 
     /**
@@ -14,12 +18,18 @@ public class Metric implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	@Id
+    @GeneratedValue
+    private Long id;
+
+	private String name;
 
     private String error;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Statistics statistics;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private SourceCode sourceCode;
 
     private boolean pmd;
@@ -28,14 +38,31 @@ public class Metric implements Serializable {
 
     private boolean cyclomaticComplexity;
 
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "PMD_METRICS_ID")
     private List<PMDMetric> pmdMetrics;
 
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "CHECKSTYLE_METRICS_ID")
     private List<CheckstyleMetric> checkstyleMetrics;
 
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "CYCLOMATIC_COMPLEXITY_METRICS_ID")
     private List<CyclomaticComplexity> cyclomaticComplexities;
 
     public Metric() {
         super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Statistics getStatistics() {
@@ -46,12 +73,12 @@ public class Metric implements Serializable {
         this.statistics = statistics;
     }
 
-    public String getId() {
-		return id;
+    public String getName() {
+		return name;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
     public String getError() {

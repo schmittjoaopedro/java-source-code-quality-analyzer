@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.schmittjoaopedro</groupId>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
 
     <properties>
@@ -41,12 +41,12 @@
             <artifactId>log4j-core</artifactId>
             <version>2.10.0</version>
         </dependency>
-		<!-- mvn install:install-file -Dfile={path/to/your/ojdbc.jar} -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar -->
         <dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>11.2.0.4.0</version>
-		</dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+            <version>1.4.200</version>
+        </dependency>
         <!--
         <dependency>
             <groupId>com.github.schmittjoaopedro</groupId>
@@ -77,14 +77,13 @@
             <artifactId>checkstyle</artifactId>
             <version>8.8</version>
         </dependency>
-        <!-- MICRO SERVICE DEPENDENCIES -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
     </dependencies>
 
